@@ -1,0 +1,192 @@
+﻿@model ExcelToDatabase.Models.InstanceMonthVm
+
+
+<p>
+    <button id="btnProcess" type="button" class="btn btn-primary">Process Earnings</button>
+</p>
+
+
+
+<div class="card bg-light mb-3" style="max-width: 100rem;">
+    <div class="card-header">Header</div>
+    <div class="card-body">
+        <h4 class="card-title">Light card title</h4>
+        <table id="tblMonthInstances" class="table">
+            <thead>
+                <tr>
+                    <th>
+                        <label for="inputField3" class="form-label">Month Name</label>
+                    </th>
+                    <th>
+                        <label for="inputField3" class="form-label">Month</label>
+                    </th>
+                    <th>
+                        <label for="inputField3" class="form-label">Site</label>
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.uploadInstances)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Month.MonthName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Year)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Site)
+                        </td>
+                        <td>
+
+                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" asp-action="GetIndividualDeductionsListByUploadInstanceId" asp-route-id="@item.UploadInstanceID">Manage Deductions</a>
+                                <a class="dropdown-item" asp-action="GetIndividualEarningsListByUploadInstanceId" asp-route-id="@item.UploadInstanceID">Manage Earnings</a>
+                                <a class="dropdown-item" asp-action="Edit" asp-route-id="@item.UploadInstanceID">Something else here</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" asp-action="Edit" asp-route-id="@item.UploadInstanceID">Separated link</a>
+                            </div>
+
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+@* Modal Forms  *@
+
+<div id="btnAddProcessEarning" class="modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <!-- First Section with 3 Input Fields -->
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                                <label for="monthDropdown">Select Month:</label>
+                            <select id="monthDropdown" name="MonthId" class="form-control">
+                                    <option value="">-- Select Month --</option>
+                                    @foreach (var month in Model.months)
+                                    {
+                                        <option value="@month.MonthId">@month.MonthName</option>
+                                    }
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="inputField2" class="form-label">Year</label>
+                            <input type="number" class="form-control" id="inputYear">
+                        </div>
+                    </div>
+                    <!-- Second Section with 2 File Input Controls -->
+                    <div class="accordion" id="accordionExample">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingOne">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                    Earnings Documents
+                                </button>
+                            </h2>
+                            <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample" style="padding:10px">
+                                <div class="mb-3">
+                                    <label for="fileInput1" class="form-label">Deductions</label>
+                                        <input type="file" class="form-control" id="FileUpload1" name="deductionsDocument">
+                                    
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingTwo">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                    Deduction Documents
+                                </button>
+                            </h2>
+                            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample" style="padding:10px">
+                                <div class="mb-3">
+                                    <label for="fileInput2" class="form-label">Earnings</label>
+                                    <input type="file" class="form-control" id="FileUpload2" name="earningsDocument">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" asp-controller="Pay_UploadInstance" asp-action="Create" id="saveChangesBtn" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#tblMonthInstances').DataTable();
+
+            $('#btnProcess').click(function () {
+                $('#btnAddProcessEarning').modal('show');
+            });
+
+            $('#saveChangesBtn').click(function () {
+                var formData = new FormData();
+                formData.append("Year", $('#inputYear').val());
+                formData.append("MonthId", $('#monthDropdown').val());
+
+                var files = $("#FileUpload1")[0].files;
+                for (var i = 0; i < files.length; i++) {
+                    formData.append("FileUpload1", files[i]);
+                }
+
+                var files2 = $("#FileUpload2")[0].files;
+                for (var j = 0; j < files2.length; j++) {
+                    formData.append("FileUpload2", files2[j]);
+                }
+
+                        
+
+                // Send data to the controller using AJAX
+                $.ajax({
+                    url: '/pay_UploadInstance/Create',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,  // Prevent jQuery from automatically processing formData
+                    contentType: false,  // Prevent jQuery from setting contentType
+                    success: function (response) {
+                        if (response.success) {
+                            // Handle success response
+                        } else {
+                            // Handle error response
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle error response
+                    }
+                });
+            });
+        });
+    </script>
+}
+

@@ -1,0 +1,472 @@
+﻿@model ExcelToDatabase.Models.AccountVm
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<p>
+    <button id="btnProcess" type="button" class="btn btn-primary"><img src="~/bsicons/plus-circle.svg" /> Process Account</button>
+</p>
+
+<div class="card bg-light mb-3" style="max-width: 100rem;">
+    <div class="card-header"><b>GL Accounts</b></div>
+    <div class="card-body">
+@*         <h4 class="card-title">Light card title</h4> *@
+        <table class="table" id="tblAccounts">
+            <thead>
+                <tr>
+                    <th>
+                        Account
+                    </th>
+                    <th>
+                        Description
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.GL00100s)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ACTINDX)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ACTDESCR)
+                        </td>
+                        <td>
+                            <div class="dropdown">
+                                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                <div class="dropdown-menu">
+                                    <a href="#" class="dropdown-item btnManageAcc" data-actindx="@item.ACTINDX"><img src="~/bsicons/pencil.svg" />Edit Details</a>
+                                    <!--<a href="#" class="dropdown-item btnManageAcc"  data-actindx="@item.ACTINDX">Manage Account</a>-->
+
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@* Modal for adding new account  *@
+<div id="AddProcessEarning" class="modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add new GL Account</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <!-- First Section with 3 Input Fields -->
+                    <div class="col-md-12">
+                        <div style="padding-top:10px" class="row">
+                            <div class="form-floating">
+
+                                <select id="accountDropdown" name="ACTINDX" class="form-control">
+                                    <option value="">-- Select Account --</option>
+                                    @foreach (var account in ViewBag.AllGLAccountsDd)
+                                    {
+                                        <option value="@account.ACTINDX">@account.ACTDESCR</option>
+                                    }
+                                </select>
+                                <label for="accountDropdown">Account*</label>
+                            </div>
+                        </div>
+                        <div style="padding-top:10px" class="row">
+                            <div class="form-floating">
+
+                                <select id="paypointDropdown" name="MonthId" class="form-control">
+                                    <option value="">-- Select PayPoint --</option>
+                                    @foreach (var paypoint in Model.PayPaypoints)
+                                    {
+                                        <option value="@paypoint.PayPointId">@paypoint.PayPointDescription</option>
+                                    }
+                                </select>
+                                <label for="paypointDropdown">PayPoint*</label>
+                            </div>
+                        </div>
+                        <div style="padding-top:10px" class="row">
+                            <div class="form-floating">
+
+                                <select id="earningDropdown" name="EarningId" class="form-control">
+                                    <option value="">-- Select Earning Type --</option>
+                                    @foreach (var earning in Model.PayEarnings)
+                                    {
+                                        <option value="@earning.EarningId">@earning.Earning</option>
+                                    }
+                                </select>
+                                <label for="earningDropdown">Earning*</label>
+                            </div>
+                        </div>
+                        <div style="padding-top:10px" class="row">
+                            <div class="form-floating">
+                                <input type="date" id="datepicker" name="selectedDate" class="form-control">
+                                <label for="datepicker">Date*</label>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" asp-controller="Pay_UploadInstance" asp-action="Create" id="saveChangesBtn" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@* madal for modify the account  details  *@
+<div id="modalManageAcc" class="modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit GL Account</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <!-- First Section with 3 Input Fields -->
+                    <div class="col-md-12">
+                        @* Dropdown for GLAccounts *@
+                        <div style="padding-top:10px" class="row">
+                            <div class="form-floating">
+                                <select class="form-select form-select-sm" id="edGLAccountDropdown" aria-label="Floating label select example"></select>
+                                <label class="required" for="edGLAccountDropdown">GL Account Type</label>
+                            </div>
+                        </div>
+
+                        @* Dropdown for Earnings *@
+                        <div style="padding-top:10px" class="row">
+                            <div class="form-floating">
+                                <select class="form-select form-select-sm" id="edEarningDropdown" aria-label="Floating label select example"></select>
+                                <label class="required" for="edEarningDropdown">Earning Type</label>
+                            </div>
+                        </div>
+
+                        @* Dropdown for PayPoints *@
+                        <div style="padding-top:10px" class="row">
+                            <div class="form-floating">
+                                <select class="form-select form-select-sm" id="edPayPointDropdown" aria-label="Floating label select example"></select>
+                                <label class="required" for="edPayPointDropdown">Pay Point Type</label>
+                            </div>
+                        </div>
+
+
+                        <div style="padding-top:10px" class="row">
+                            <div class="form-floating">
+                                <input type="date" id="edDatepicker" name="selectedDate" class="form-control">
+                                <label for="edDatepicker">Date*</label>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" asp-controller="Pay_UploadInstance" asp-action="Create" id="edSaveChangesBtn" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet" />
+<link href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            setTimeout(function () {
+                $('#tblAccounts').DataTable();
+            }, 2500);
+
+            $('#btnProcess').click(function () {
+                $('#AddProcessEarning').modal('show');
+            });
+
+            $('.btnManageAcc, .btnDetailAcc').click(function () {
+                
+                var ACTINDX = $(this).attr('data-actindx'); // Retrieve the ACTINDX value from data-actindx attribute
+                ManageAccDetails(ACTINDX); // Call the function with ACTINDX as argument
+
+                setTimeout(function () {
+                    var accId = GetAccountId();
+                }, 1500);
+                
+                
+            });
+            $('#saveChangesBtn').click(function () {
+                Create();
+            });
+
+            $('#edSaveChangesBtn').click(function () {
+                var ACTINDX = $(this).attr('data-actindx');
+                var formData = new Object();
+                formData.ACTINDX = $('#edGLAccountDropdown option:selected').val();
+                formData.PayPointId = $('#edPayPointDropdown option:selected').val();
+                formData.EarningId = $('#edEarningDropdown option:selected').val();
+                formData.DateCreated = $('#edDatepicker').val();
+                formData.accountId = $(".btnManageAcc").attr('data-accountid');
+                //formData.accountId = GetAccountId();
+
+
+
+                $.ajax({
+                    url: 'pay_Account/Edit?id=' + ACTINDX,
+                    data: formData,
+                    type: 'post',
+                    success: function (response) {
+                        if (response == null || response == undefined || response.length == 0) {
+                            alert('Unable to save the data.');
+                        } else {
+                            $('#modalManageAcc').modal('hide');
+                            setTimeout(function () {
+                                alert(response);
+                            }, 1000);
+                            document.location.href = 'http://localhost:21840/Pay_Account';
+
+                        }
+                    },
+                    error: function () {
+
+                        alert('Unable to save the data.');
+                    }
+                });
+            });
+
+            function Create() {
+                var formData = new Object();
+                formData.ACTINDX = $('#accountDropdown option:selected').val();
+                formData.PayPointId = $('#paypointDropdown option:selected').val();
+                formData.EarningId = $('#earningDropdown option:selected').val();
+                formData.DateCreated = $('#datepicker').val();
+
+                $.ajax({
+                    url: 'pay_Account/Create',
+                    data: formData,
+                    type: 'post',
+                    success: function (response) {
+                        if (response == null || response == undefined || response.length == 0) {
+                            alert('Unable to save the data.');
+                        } else {
+                            $('#AddProcessEarning').modal('hide');
+                            setTimeout(function () {
+                                alert(response);
+                            }, 5000);
+
+                            setTimeout(function () {
+                                alert(response);
+                            }, 5000);
+                            document.location.href = 'http://localhost:21840/Pay_Account';
+
+                        }
+                    },
+                    error: function () {
+
+                        alert('Unable to save the data.');
+                    }
+                });
+
+            }
+            // Function to retrieve account details and populate modal
+            function ManageAccDetails(ACTINDX) {
+                var earningTypeId;
+                var iearning;
+
+                // AJAX request to fetch account details
+                $.ajax({
+                    url: 'pay_Account/Details?id=' + ACTINDX,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response == null || response == undefined || response.length == 0) {
+                            alert('Unable to save the data.');
+                        } else {
+                            earningTypeId = response.earningId;
+                            iearning = response.earning;
+
+                            // Call functions to populate dropdowns
+                            FillAccountGL00100DropDownsType(response.actindx, response.actdescr);
+                            FillPaypointDropDownsType(response.payPointId, response.payPointDescription);
+                            FillAccountEarningDropDownsType(response.earningId, response.earning);
+                            GetDate(response.dateCreated);
+                            
+                            // Display modal
+                            $('#modalManageAcc').modal('show');
+                            
+                        }
+                    },
+                    error: function (response) {
+                        alert('getDetailData error');
+                    }
+                });
+            }
+
+            function FillAccountGL00100DropDownsType(glaccountTypeId, iglaccount) {
+                $(function () {
+                    var glAccountDd = $("#edGLAccountDropdown");
+                    var glAccountId = 1;
+                    glAccountDd.empty().append('<option selected="selected" value="0" disabled = "disabled">Loading.....</option>');
+
+                    $.ajax({
+                        type: "POST",
+                        url: 'pay_Account/AccountListData?id=' + glAccountId,
+                        data: '{}',
+                        success: function (response) {
+                            glAccountDd.empty().append('<option selected="selected" value="0">Please select</option>');
+                            $.each(response, function (index,item) {
+                                // glAccountDd.append($("<option></option>").val(this['Value']).html(this['Text']));
+
+                                glAccountDd.append($("<option></option>").val(item.value).html(item.text));
+                            });
+                            glAccountDd.append('<option selected="selected" value="' + glaccountTypeId + '">' + iglaccount + '</option>');
+                        },
+                        failure: function (response) {
+                            alert(response.responseText);
+                        },
+                        error: function (response) {
+                            alert(response.responseText);
+                        }
+                    });
+                });
+            }
+
+            function FillPaypointDropDownsType(paypointTypeId, ipaypoint) {
+                $(function () {
+                    var paypointDd = $('#edPayPointDropdown');
+                    var paypointId = 2;
+                    paypointDd.empty().append('<option selected="selected" value="0" disabled = "disabled">Loading.....</option>');
+
+                    $.ajax({
+                        type: "POST",
+                        url: 'pay_Account/AccountListData?id=' + paypointId,
+                        data: '{}',
+                        success: function (response) {
+                            paypointDd.empty().append('<option selected="selected" value="0">Please select</option>');
+                            $.each(response, function (index, item) {
+                                // glAccountDd.append($("<option></option>").val(this['Value']).html(this['Text']));
+
+                                paypointDd.append($("<option></option>").val(item.value).html(item.text));
+                            });
+                            paypointDd.append('<option selected="selected" value="' + paypointTypeId + '">' + ipaypoint + '</option>');
+                        },
+                        failure: function (response) {
+                            alert(response.responseText);
+                        },
+                        error: function (response) {
+                            alert(response.responseText);
+                        }
+                    });
+                });
+            }
+
+            function FillAccountEarningDropDownsType(earningTypeId, iearning) {
+                $(function () {
+                    var earningDd = $("#edEarningDropdown");
+                    var idEarning = 3;
+                    earningDd.empty().append('<option selected="selected" value="0" disabled = "disabled">Loading.....</option>');
+
+                    $.ajax({
+                        type: "POST",
+                        url: 'pay_Account/AccountListData?id=' + idEarning,
+                        data: '{}',
+                        success: function (response) {
+                            earningDd.empty().append('<option selected="selected" value="0">Please select</option>');
+                            $.each(response, function (index, item) {
+                                // glAccountDd.append($("<option></option>").val(this['Value']).html(this['Text']));
+
+                                earningDd.append($("<option></option>").val(item.value).html(item.text));
+                            });
+                            earningDd.append('<option selected="selected" value="' + earningTypeId + '">' + iearning + '</option>');
+                        },
+                        failure: function (response) {
+                            alert(response.responseText);
+                        },
+                        error: function (response) {
+                            alert(response.responseText);
+                        }
+                    });
+                });
+            }
+
+            function GetDate(dateCreated) {
+                $(function () {
+                    
+
+                    var dateDd = $("#edDatepicker");
+
+                    // Set the initial date value
+                    var initialDate = dateCreated;
+
+                    // Convert the date to mm/dd/yyyy format
+                    var dateObj = new Date(initialDate);
+                    var month = dateObj.getMonth() + 1;
+                    var day = dateObj.getDate();
+                    var year = dateObj.getFullYear();
+                    var formattedDate = month + '/' + day + '/' + year;
+
+                    
+
+                    // Set the value of the date input field
+                    dateDd.val(formattedDate);
+
+                    // Initialize the datepicker
+                    dateDd.datepicker({
+                        dateFormat: 'mm/dd/yy'
+                    });
+                    alert('The new date :' + formattedDate);
+                });
+            }
+
+
+            function GetAccountId() {
+
+                var formData = new Object();
+                formData.ACTINDX = $('#edGLAccountDropdown option:selected').val();
+                formData.PayPointId = $('#edPayPointDropdown option:selected').val();
+                formData.EarningId = $('#edEarningDropdown option:selected').val();
+                formData.DateCreated = $('#edDatepicker').val();
+
+                $.ajax({
+                    url: 'pay_Account/GetAccountId',
+                    data: formData,
+                    type: 'get',
+                    success: function (response) {
+                        if (response == null ) {
+                            alert('Unable to fetch the account id.');
+                        } else {
+
+                            $(".btnManageAcc").attr("data-accountid", response);
+
+                            alert('The id is  ' + response);
+
+                        }
+                    },
+                    error: function () {
+
+                        alert('Unable to fetch the account id.');
+                    }
+                });
+            }
+
+        });
+
+    </script>
+}

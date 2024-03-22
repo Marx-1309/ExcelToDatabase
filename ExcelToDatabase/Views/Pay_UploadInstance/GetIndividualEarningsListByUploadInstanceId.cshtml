@@ -1,0 +1,341 @@
+﻿@model IEnumerable<ExcelToDatabase.Models.Pay_VIP>
+
+@{
+    ViewData["Title"] = "GetIndividualEarningsListByUploadInstanceId";
+}
+
+<h1>GetIndividualEarningsListByUploadInstanceId</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Surname)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FullNames)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PayPoint)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EDSALARY)
+            </th>
+            @* <th>
+                @Html.DisplayNameFor(model => model.EDANNUALBONUS)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EDSUBSIDYNON_TAX)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EDSUBSIDYTAXABLE)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EDCARALLTAXABLE)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EDCARALLNONTAX)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EDOVERTIME1_5)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EDOVERTIME2_0)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EDLEAVEPAIDOUT)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EDUNPAIDLEAVE)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EDBACKPAYSALARY)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EDACTINGALL)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EDTELEPHONEALL)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EDFURNITUREALL)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EDWATER_ELEC)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EDTRAVELALL)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EDHOUSING)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EDREFUNDS)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EDCARRUNNINGCOS)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EDRENTALALLOWANC)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EDTRANSPORTALLOW)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EDCASHBONUS)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EDS_TCLAIM)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EDSEPARATIONGRAT)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EDS_TCLAIM_2)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EDREMOTENESSALLO)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EDREMOTENESSALL)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EDCASHBONUS_2)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EDALLOBACKPAY)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EDBACKPAYNONTAX)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EDBACKPAYTAXABLE)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EDBACKPAYBONUS)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EDFIXEDOVERTIME)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EDT_SHIRTREFUND)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EDOVERTIMBACKPAY)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EDHOUSALLBACKPAY)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EDTRANSBACKPAY)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EDACTINGBACKPAY)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EDCASHBBACKPAY)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EDREMOTENESSBP)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EDBACKPAYSUBSIDY)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EDHOUSINGNONTAX)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EDHOUSINGTAXABLE)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EDBPMANNONTAX)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EDBPMANTAXABLE)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EDCARALLBPTAX)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EDCARALLBPN_TAX)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EDRUNCOSTBP)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UploadInstanceId)
+            </th> *@
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Surname)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FullNames)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PayPoint)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EDSALARY)
+            </td>
+            @* <td>
+                @Html.DisplayFor(modelItem => item.EDANNUALBONUS)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EDSUBSIDYNON_TAX)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EDSUBSIDYTAXABLE)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EDCARALLTAXABLE)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EDCARALLNONTAX)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EDOVERTIME1_5)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EDOVERTIME2_0)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EDLEAVEPAIDOUT)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EDUNPAIDLEAVE)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EDBACKPAYSALARY)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EDACTINGALL)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EDTELEPHONEALL)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EDFURNITUREALL)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EDWATER_ELEC)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EDTRAVELALL)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EDHOUSING)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EDREFUNDS)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EDCARRUNNINGCOS)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EDRENTALALLOWANC)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EDTRANSPORTALLOW)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EDCASHBONUS)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EDS_TCLAIM)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EDSEPARATIONGRAT)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EDS_TCLAIM_2)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EDREMOTENESSALLO)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EDREMOTENESSALL)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EDCASHBONUS_2)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EDALLOBACKPAY)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EDBACKPAYNONTAX)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EDBACKPAYTAXABLE)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EDBACKPAYBONUS)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EDFIXEDOVERTIME)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EDT_SHIRTREFUND)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EDOVERTIMBACKPAY)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EDHOUSALLBACKPAY)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EDTRANSBACKPAY)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EDACTINGBACKPAY)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EDCASHBBACKPAY)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EDREMOTENESSBP)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EDBACKPAYSUBSIDY)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EDHOUSINGNONTAX)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EDHOUSINGTAXABLE)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EDBPMANNONTAX)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EDBPMANTAXABLE)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EDCARALLBPTAX)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EDCARALLBPN_TAX)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EDRUNCOSTBP)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UploadInstanceId)
+            </td> *@
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.EmployeeCode">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.EmployeeCode">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.EmployeeCode">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
