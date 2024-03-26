@@ -4,38 +4,57 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<div class="card bg-light mb-3" style="max-width: 100rem;">
+    <div class="card-header"><b>Pay Earnings</b></div>
+    <div class="card-body">
+        @*         <h4 class="card-title">Light card title</h4> *@
+        <table class="table" id="tblPayEarning">
+            <thead>
+                <tr>
+                    <th>
+                        Earning
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Earning)
+                        </td>
+                        <td>
+                            <div class="dropdown">
+                                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                <div class="dropdown-menu">
+                                    <a href="#" class="dropdown-item btnManageAcc" data-actindx="@item.EarningId"><img src="~/bsicons/pencil.svg" />Edit Details</a>
+                                    <!--<a href="#" class="dropdown-item btnManageAcc"  data-actindx="@item.EarningId">Manage Account</a>-->
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Earning)
-            </th>
-       @*      <th>
-                @Html.DisplayNameFor(model => model.EarningDescription)
-            </th> *@
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Earning)
-            </td>
-@*             <td>
-                @Html.DisplayFor(modelItem => item.EarningDescription)
-            </td> *@
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.EarningId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.EarningId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.EarningId">Delete</a>
-            </td>
-        </tr>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet" />
+<link href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            setTimeout(function () {
+                $('#tblPayEarning').DataTable();
+            }, 1000);
+
+        });
+
+    </script>
 }
-    </tbody>
-</table>

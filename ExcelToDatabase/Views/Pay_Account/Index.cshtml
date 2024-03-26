@@ -196,6 +196,131 @@
                 $('#tblAccounts').DataTable();
             }, 2500);
 
+            $('#accountDropdown').change(function () {
+                ValidateAddForm();
+            })
+
+            $('#paypointDropdown').change(function () {
+                ValidateAddForm();
+            })
+
+            $('#earningDropdown').change(function () {
+                ValidateAddForm();
+            })
+
+            $('#datepicker').change(function () {
+                ValidateAddForm();
+            })
+
+            $('#edGLAccountDropdown').change(function () {
+                ValidateEditForm();
+            })
+
+            $('#edPayPointDropdown').change(function () {
+                ValidateEditForm();
+            })
+
+            $('#edEarningDropdown').change(function () {
+                ValidateEditForm();
+            })
+
+            $('#edDatepicker').change(function () {
+                ValidateEditForm();
+            })
+
+            function ValidateAddForm() {
+
+                var isValid = true;
+
+
+                if ($('#accountDropdown').val().trim() == "") {
+                    $('#accountDropdown').css('border-color', 'Red');
+                    isValid = false;
+                }
+                else {
+                    $('#accountDropdown').css('border-color', 'lightgrey');
+                }
+
+                if ($('#paypointDropdown').val().trim() == "") {
+                    $('#paypointDropdown').css('border-color', 'Red');
+                    isValid = false;
+                }
+                else {
+                    $('#paypointDropdown').css('border-color', 'lightgrey');
+                }
+
+                if ($('#earningDropdown').val().trim() == "") {
+                    $('#earningDropdown').css('border-color', 'Red');
+                    isValid = false;
+                }
+                else {
+                    $('#earningDropdown').css('border-color', 'lightgrey');
+                }
+
+                if ($('#datepicker').val().trim() == "") {
+                    $('#datepicker').css('border-color', 'Red');
+                    isValid = false;
+                }
+                else {
+                    $('#datepicker').css('border-color', 'lightgrey');
+                }
+                return isValid;
+            };
+
+            function ValidateEditForm() {
+
+                var isValid = true;
+
+
+                if ($('#edGLAccountDropdown').val().trim() == "") {
+                    $('#edGLAccountDropdown').css('border-color', 'Red');
+                    isValid = false;
+                }
+                else {
+                    $('#edGLAccountDropdown').css('border-color', 'lightgrey');
+                }
+
+                if ($('#edEarningDropdown').val().trim() == "") {
+                    $('#edEarningDropdown').css('border-color', 'Red');
+                    isValid = false;
+                }
+                else {
+                    $('#edEarningDropdown').css('border-color', 'lightgrey');
+                }
+
+                if ($('#edPayPointDropdown').val().trim() == "") {
+                    $('#edPayPointDropdown').css('border-color', 'Red');
+                    isValid = false;
+                }
+                else {
+                    $('#edPayPointDropdown').css('border-color', 'lightgrey');
+                }
+
+                if ($('#edDatepicker').val().trim() == "") {
+                    $('#edDatepicker').css('border-color', 'Red');
+                    isValid = false;
+                }
+                else {
+                    $('#edDatepicker').css('border-color', 'lightgrey');
+                }
+                return isValid;
+            };
+            
+
+            function ClearAddForm() {
+                $('#accountDropdown').val() == "";
+                $('#paypointDropdown').val() == "";
+                $('#earningDropdown').val() == "";
+                $('#datepicker').val() == "";
+            }
+
+            function ClearEditForm() {
+                $('#edGLAccountDropdown').val() == "";
+                $('#edEarningDropdown').val() == "";
+                $('#edPayPointDropdown').val() == "";
+                $('#edDatepicker').val() == "";
+            }
+
             $('#btnProcess').click(function () {
                 $('#AddProcessEarning').modal('show');
             });
@@ -216,6 +341,15 @@
             });
 
             $('#edSaveChangesBtn').click(function () {
+                var result = ValidateEditForm();
+                if (result == false) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "Please fill all fields!",
+                    });
+                    return false;
+                }
                 var ACTINDX = $(this).attr('data-actindx');
                 var formData = new Object();
                 formData.ACTINDX = $('#edGLAccountDropdown option:selected').val();
@@ -251,6 +385,11 @@
             });
 
             function Create() {
+                var result = ValidateAddForm();
+                if (result == false) {
+                    alert('All fields are required');
+                    return false;
+                }
                 var formData = new Object();
                 formData.ACTINDX = $('#accountDropdown option:selected').val();
                 formData.PayPointId = $('#paypointDropdown option:selected').val();
@@ -330,7 +469,7 @@
                         url: 'pay_Account/AccountListData?id=' + glAccountId,
                         data: '{}',
                         success: function (response) {
-                            glAccountDd.empty().append('<option selected="selected" value="0">Please select</option>');
+                            glAccountDd.empty().append('<option selected="selected" value="0">--Please select--</option>');
                             $.each(response, function (index,item) {
                                 // glAccountDd.append($("<option></option>").val(this['Value']).html(this['Text']));
 
@@ -359,7 +498,7 @@
                         url: 'pay_Account/AccountListData?id=' + paypointId,
                         data: '{}',
                         success: function (response) {
-                            paypointDd.empty().append('<option selected="selected" value="0">Please select</option>');
+                            paypointDd.empty().append('<option selected="selected" value="0">--Please select--</option>');
                             $.each(response, function (index, item) {
                                 // glAccountDd.append($("<option></option>").val(this['Value']).html(this['Text']));
 
@@ -388,7 +527,7 @@
                         url: 'pay_Account/AccountListData?id=' + idEarning,
                         data: '{}',
                         success: function (response) {
-                            earningDd.empty().append('<option selected="selected" value="0">Please select</option>');
+                            earningDd.empty().append('<option selected="selected" value="0">--Please select--</option>');
                             $.each(response, function (index, item) {
                                 // glAccountDd.append($("<option></option>").val(this['Value']).html(this['Text']));
 
@@ -455,7 +594,7 @@
 
                             $(".btnManageAcc").attr("data-accountid", response);
 
-                            alert('The id is  ' + response);
+                           // alert('The id is  ' + response);
 
                         }
                     },

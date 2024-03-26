@@ -10,7 +10,7 @@ namespace ExcelToDatabase.Models
         public Pay_Month Month { get; set;}
         public int MonthId { get; set; }
         public int Year { get; set;}
-        public DateTime? initDate { get; set; } = DateTime.UtcNow;
+        public DateTime? DateCreated { get; set; } 
         public String Site { get; set; }
     }
 }

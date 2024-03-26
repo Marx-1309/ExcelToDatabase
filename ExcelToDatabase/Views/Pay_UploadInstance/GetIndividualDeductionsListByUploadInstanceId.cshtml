@@ -1,27 +1,40 @@
-﻿@model IEnumerable<ExcelToDatabase.Models.Pay_VIP>
+﻿@model IEnumerable<ExcelToDatabase.Models.Pay_Deductions>
 
 @{
-    ViewData["Title"] = "GetIndividualEarningsListByUploadInstanceId";
+    ViewData["Title"] = "GetIndividualDeductionsListByUploadInstanceId";
 }
 
+<p>
+    <button id="btnProcess" type="button" class="btn btn-primary"><img src="~/bsicons/plus-circle.svg" /> Process Account</button>
+</p>
 
 <div class="card bg-light mb-3" style="max-width: 100rem;">
-    <div class="card-header"><b>Instances</b></div>
+    <div class="card-header"><b>GL Accounts</b></div>
     <div class="card-body">
-        <table class="table" id="tblIndividualEarningsListByUploadInstanceId">
+
+        <table class="table" id="IndividualDeductionsListByUploadInstanceId">
     <thead>
         <tr>
             <th>
                 Surname
             </th>
             <th>
-                Full Name
+                FullName
             </th>
             <th>
-                Pay Point
+                PayPoint
             </th>
             <th>
-                Salary
+                DdSocial Security
+            </th>
+            <th>
+                DdPension
+            </th>
+            <th>
+                CcSocial Security
+            </th>
+            <th>
+                CcPension
             </th>
             <th></th>
         </tr>
@@ -39,13 +52,24 @@
                 @Html.DisplayFor(modelItem => item.PayPoint)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.EDSALARY, "{0:c}")
+                @Html.DisplayFor(modelItem => item.DdSocialSecurity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DdPension)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CcSocialSecurity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CcPension)
             </td>
             <td>
                             <div class="dropdown">
                                 <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"></a>
                                 <div class="dropdown-menu">
                                     <a href="#" class="dropdown-item btnManageAcc" data-actindx="@item.EmployeeCode"><img src="~/bsicons/pencil.svg" />Edit Details</a>
+                                    <a href="#" class="dropdown-item btnManageAcc" data-actindx="@item.EmployeeCode"><img src="~/bsicons/eye.svg" />See Details</a>
+                                    <a href="#" class="dropdown-item btnManageAcc" data-actindx="@item.EmployeeCode"><img  />Delete Details</a>
                                     <!--<a href="#" class="dropdown-item btnManageAcc"  data-actindx="@item.EmployeeCode">Manage Account</a>-->
 
                                 </div>
@@ -57,18 +81,13 @@
 </table>
 </div>
 </div>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet" />
-<link href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
-
 @section Scripts {
     <script type="text/javascript">
         $(document).ready(function () {
-            setTimeout(function () {
-                $('#tblIndividualEarningsListByUploadInstanceId').DataTable();
-            }, 1500);
 
+            setTimeout(function () {
+                $('#IndividualDeductionsListByUploadInstanceId').DataTable();
+            }, 1000);
         });
     </script>
-}
+        };

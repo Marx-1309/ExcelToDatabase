@@ -6,9 +6,9 @@
     <title>@ViewData["Title"] - ExcelToDatabase</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="//cdn.datatables.net/2.0.2/css/dataTables.dataTables.min.css" />
-    <link href="~/cdn files/datatable.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.css" />
+    <link href="~/sweetalert/sweetalert.css" rel="stylesheet" />
+    <link href="~/toast-notification/toastmin.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/ExcelToDatabase.styles.css" asp-append-version="true" />
 </head>
 <body>
@@ -28,21 +28,23 @@
                     <ul class="navbar-nav flex-grow-1">
                         
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Upload Files</a>
+                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><img src="~/bsicons/upload.svg" /> Upload Files</a>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item" asp-controller="Pay_UploadInstance" asp-action="Index">Earnings </a>
-                                <a class="dropdown-item" asp-controller="Home" asp-action="UploadExcel">Deductions</a>
+                                <a class="dropdown-item" asp-controller="Pay_UploadInstance" asp-action="Index"> Earnings & Deductions </a>
+                               @*  <a class="dropdown-item" asp-controller="Home" asp-action="UploadExcel">Deductions</a> *@
                             </div>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Pay_Account" asp-action="Index">GL Accounts</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Pay_PayPoint" asp-action="Index">Pay Point</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><img src="~/bsicons/tools.svg" /> Tools</a>
+                            <div class="dropdown-menu">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Pay_Earning" asp-action="Index">Earnings</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Pay_PayPoint" asp-action="Index">Pay Point</a>
+                                @*  <a class="dropdown-item" asp-controller="Home" asp-action="UploadExcel">Deductions</a> *@
+                            </div>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Pay_Earning" asp-action="Index">Earnings</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Pay_Account" asp-action="Index"><img src="~/bsicons/person-vcard.svg" /> GL Accounts</a>
                         </li>
                     </ul>
                 </div>
@@ -61,11 +63,14 @@
             &copy; @DateTime.UtcNow.Year.ToString() - Kinetic Wizard Software Solutions - All rights reserved. - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/cdn files/datatable.js"></script>
     <script src="//cdn.datatables.net/2.0.2/js/dataTables.min.js"></script>
+    <script src="~/sweetalert/sweetalermin.js"></script>
+    <script src="~/toast-notification/toastrmin.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

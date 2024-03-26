@@ -4,38 +4,141 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
-
 <p>
-    <a asp-action="Create">Create New</a>
+    <button id="btnProcess" type="button" class="btn btn-primary"><img src="~/bsicons/plus-circle.svg" /> Create Pay_Point</button>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.PayPointCode)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PayPointDescription)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.PayPointCode)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PayPointDescription)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.PayPointId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.PayPointId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.PayPointId">Delete</a>
-            </td>
-        </tr>
+
+<div class="card bg-light mb-3" style="max-width: 100rem;">
+    <div class="card-header"><b>GL Accounts</b></div>
+    <div class="card-body">
+
+        @*         <h4 class="card-title">Light card title</h4> *@
+        <table class="table" id="tblPayPoint">
+            <thead>
+                <tr>
+                    <th>
+                        PayPoint Code
+                    </th>
+                    <th>
+                        Description
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PayPointCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PayPointDescription)
+                        </td>
+                        <td>
+                            <div class="dropdown">
+                                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                <div class="dropdown-menu">
+                                    <a href="#" class="dropdown-item btnManageAcc" data-actindx="@item.PayPointCode"><img src="~/bsicons/pencil.svg" />Edit Details</a>
+                                    <!--<a href="#" class="dropdown-item btnManageAcc"  data-actindx="@item.PayPointDescription">Manage Account</a>-->
+
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@* Modal for adding new account  *@
+@* <div id="AddProcessPayPoint" class="modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add new GL Account</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <!-- First Section with 3 Input Fields -->
+                    <div class="col-md-12">
+                        <div style="padding-top:10px" class="row">
+                            <div class="form-floating">
+
+                                <select id="accountDropdown" name="ACTINDX" class="form-control">
+                                    <option value="">-- Select Account --</option>
+                                    @foreach (var account in ViewBag.AllGLAccountsDd)
+                                    {
+                                        <option value="@account.ACTINDX">@account.ACTDESCR</option>
+                                    }
+                                </select>
+                                <label for="accountDropdown">Account*</label>
+                            </div>
+                        </div>
+                        <div style="padding-top:10px" class="row">
+                            <div class="form-floating">
+
+                                <select id="paypointDropdown" name="MonthId" class="form-control">
+                                    <option value="">-- Select PayPoint --</option>
+                                    @foreach (var paypoint in Model.)
+                                    {
+                                        <option value="@paypoint.PayPointId">@paypoint.PayPointDescription</option>
+                                    }
+                                </select>
+                                <label for="paypointDropdown">PayPoint*</label>
+                            </div>
+                        </div>
+                        <div style="padding-top:10px" class="row">
+                            <div class="form-floating">
+
+                                <select id="earningDropdown" name="EarningId" class="form-control">
+                                    <option value="">-- Select Earning Type --</option>
+                                    @foreach (var earning in Model.PayEarnings)
+                                    {
+                                        <option value="@earning.EarningId">@earning.Earning</option>
+                                    }
+                                </select>
+                                <label for="earningDropdown">Earning*</label>
+                            </div>
+                        </div>
+                        <div style="padding-top:10px" class="row">
+                            <div class="form-floating">
+                                <input type="date" id="datepicker" name="selectedDate" class="form-control">
+                                <label for="datepicker">Date*</label>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" asp-controller="Pay_UploadInstance" asp-action="Create" id="saveChangesBtn" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div> *@
+
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet" />
+<link href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () { 
+            setTimeout(function () {
+                $('#tblPayPoint').DataTable();
+            }, 1500);
+
+        });
+    </script>
 }
-    </tbody>
-</table>
+                                   
