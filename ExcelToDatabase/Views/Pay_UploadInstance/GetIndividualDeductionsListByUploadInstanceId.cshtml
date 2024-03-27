@@ -2,14 +2,39 @@
 
 @{
     ViewData["Title"] = "GetIndividualDeductionsListByUploadInstanceId";
+    var instData = @TempData["instanceDetails"];
 }
 
-<p>
-    <button id="btnProcess" type="button" class="btn btn-primary"><img src="~/bsicons/plus-circle.svg" /> Process Account</button>
-</p>
+
+@* <div style="max-width: 100rem; height: 20rem;" class="card bg-light mb-3">
+    <div class="card-header">
+        Instance Details
+    </div>
+    <div class="card-body" style="background-color: white; display: flex; align-items: center;">
+        <button id="btnProcess" type="button" class="btn btn-primary" style="flex-shrink: 0;"><img src="~/bsicons/plus-circle.svg" /> Add new</button>
+        <div style="margin-left: 10px;">@Html.Raw(instData)</div>
+    </div>
+</div> *@
+
+<div class="accordion" id="accordionExample" style="padding-bottom:10px">
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="headingOne">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                <a><img src="~/bsicons/info-circle-fill.svg" /> Instance Details</a>
+            </button>
+        </h2>
+        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample" style="">
+            <div class="accordion-body">
+                <button id="btnProcess" type="button" class="btn btn-primary" style="flex-shrink: 0;"><img src="~/bsicons/plus-lg.svg" /> Add new</button>
+                @Html.Raw(instData);
+            </div>
+        </div>
+    </div>
+
+</div>
 
 <div class="card bg-light mb-3" style="max-width: 100rem;">
-    <div class="card-header"><b>GL Accounts</b></div>
+    <div class="card-header"><b>Individual Deductions </b></div>
     <div class="card-body">
 
         <table class="table" id="IndividualDeductionsListByUploadInstanceId">
@@ -67,9 +92,9 @@
                             <div class="dropdown">
                                 <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"></a>
                                 <div class="dropdown-menu">
-                                    <a href="#" class="dropdown-item btnManageAcc" data-actindx="@item.EmployeeCode"><img src="~/bsicons/pencil.svg" />Edit Details</a>
-                                    <a href="#" class="dropdown-item btnManageAcc" data-actindx="@item.EmployeeCode"><img src="~/bsicons/eye.svg" />See Details</a>
-                                    <a href="#" class="dropdown-item btnManageAcc" data-actindx="@item.EmployeeCode"><img  />Delete Details</a>
+                                    <a href="#" class="dropdown-item btnManageAcc" data-actindx="@item.EmployeeCode"><img src="~/bsicons/pencil.svg" /> Edit Details</a>
+                                    <a href="#" class="dropdown-item btnManageAcc" data-actindx="@item.EmployeeCode"><img src="~/bsicons/eye.svg" /> See Details</a>
+                                    <a href="#" class="dropdown-item btnManageAcc" data-actindx="@item.EmployeeCode"><img /><img src="~/bsicons/trash.svg" /> Delete Details</a>
                                     <!--<a href="#" class="dropdown-item btnManageAcc"  data-actindx="@item.EmployeeCode">Manage Account</a>-->
 
                                 </div>
@@ -81,10 +106,69 @@
 </table>
 </div>
 </div>
+
+<!-- Modal -->
+@* <div class="modal" id="employeeEarningDetailsBtn" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
+
+                Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.
+
+                Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.
+
+                Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
+
+                Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.
+
+                Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.
+
+                Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
+
+                Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.
+
+                Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.
+
+                Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
+
+                Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.
+
+                Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.
+
+                Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
+
+                Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.
+
+                Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.
+
+                Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
+
+                Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.
+
+                Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div> *@
+
+
+
+
 @section Scripts {
     <script type="text/javascript">
         $(document).ready(function () {
-
+          
             setTimeout(function () {
                 $('#IndividualDeductionsListByUploadInstanceId').DataTable();
             }, 1000);

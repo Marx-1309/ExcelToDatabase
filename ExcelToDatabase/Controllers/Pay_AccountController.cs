@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ExcelToDatabase.Models;
 using System.Text.Json;
+using BenchmarkDotNet.Running;
 
 
 namespace ExcelToDatabase.Controllers
@@ -228,14 +229,22 @@ namespace ExcelToDatabase.Controllers
         [HttpPost]
         public JsonResult Edit(Pay_Account model)
         {
-            var accId = "rrr";
-            if (accId != null)
+            if(ModelState.IsValid)
             {
-                _context.Pay_Accounts.Update(model);
-                _context.SaveChanges();
-                TempData["success"] = "Success Upload";
-                return Json("Record update success");
+                var accId = "rrr";
+                if (accId != null)
+                {
+                    _context.Pay_Accounts.Update(model);
+                    int isEntityModified = _context.SaveChanges();
+                    if (isEntityModified > 0)
+                    {
+                        return Json("Record update success");
+                    }
+                    return Json("No changes made");
+
+                }
             }
+            
             return Json("");
         }
 

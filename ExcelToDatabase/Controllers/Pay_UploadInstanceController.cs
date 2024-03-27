@@ -107,12 +107,13 @@ namespace ExcelToDatabase.Controllers
                                 {
                                     bool isHeaderSkipped = false;
 
-                                    var items =  _context.Pay_VIP.Where(c => c.EmployeeCode > 0).ToListAsync().GetAwaiter().GetResult();
-                                    if (items.Count > 0)
-                                    {
-                                        _context.Pay_VIP.RemoveRange(items);
-                                         _context.SaveChangesAsync().GetAwaiter().GetResult();
-                                    }
+                                    //Incase you want to keep excel earnings data for one instance at a time 
+                                    //var items =  _context.Pay_VIP.Where(c => c.EmployeeCode > 0).ToListAsync().GetAwaiter().GetResult();
+                                    //if (items.Count > 0)
+                                    //{
+                                    //    _context.Pay_VIP.RemoveRange(items);
+                                    //     _context.SaveChangesAsync().GetAwaiter().GetResult();
+                                    //}
 
                                     while (reader.Read())
                                     {
@@ -254,12 +255,13 @@ namespace ExcelToDatabase.Controllers
 
                             bool isMyHeaderSkipped = false;
 
-                            var items = _context.Pay_Deduction.Where(c => c.EmployeeCode > 0).ToListAsync().GetAwaiter().GetResult();
-                            if (items.Any())
-                            {
-                                _context.RemoveRange(items);
-                                _context.SaveChangesAsync().GetAwaiter().GetResult();
-                            }
+                            //Incase you want to keep excel deductions data for one instance at a time 
+                            //var items = _context.Pay_Deduction.Where(c => c.EmployeeCode > 0).ToListAsync().GetAwaiter().GetResult();
+                            //if (items.Any())
+                            //{
+                            //    _context.RemoveRange(items);
+                            //    _context.SaveChangesAsync().GetAwaiter().GetResult();
+                            //}
 
                             while (reader.Read())
                             {
@@ -348,6 +350,7 @@ namespace ExcelToDatabase.Controllers
                     {
                         MonthId = uploadInstance.MonthId,
                         Year = uploadInstance.Year,
+                        DateCreated = uploadInstance.DateCreated,
                         Site = "ORC"
                     }).Entity;
 
@@ -386,6 +389,19 @@ namespace ExcelToDatabase.Controllers
         [HttpGet]
         public async Task<IActionResult> GetIndividualDeductionsListByUploadInstanceId(int id)
         {
+            var instance = await _context.Pay_UploadInstance.Where(r => r.UploadInstanceID == id).FirstOrDefaultAsync();
+            if (instance != null)
+            {
+                var insData = new
+                {
+                    MonthName = await _context.Pay_Month.Where(r => r.MonthId == instance.MonthId).Select(r => r.MonthName.ToString().Trim()).FirstOrDefaultAsync(),
+                    Year = instance.Year,
+                    Site = instance.Site.Trim(),
+                    DateCreated = instance.DateCreated
+                };
+                TempData["instanceDetails"] = $"   <strong>    Month</strong> : {insData.MonthName}      <strong>Year</strong> : {insData.Year}      <strong>Site</strong> : {insData.Site}      <strong>Date</strong> : {insData.DateCreated}";
+
+            }
             var items = await _context.Pay_Deduction.Where(m => m.UploadInstanceId == id).ToListAsync();
             return View(items);
         }
@@ -474,7 +490,7 @@ namespace ExcelToDatabase.Controllers
                     _context.Remove(pay_InstancePayroll);
                     _context.SaveChangesAsync().GetAwaiter().GetResult();
                 };
-                return Json(true,"Record deleted successfully");
+                return Json(true);
             }
             catch(Exception ex)
             {

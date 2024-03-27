@@ -231,8 +231,10 @@
 
                     var Id = $(this).attr('data-insindx');
                     Swal.fire({
-                        title: "You are about to delete this record and its related records!",
+                        icon: "error",
+                        title: "You are about to delete this record and its related data!",
                         showDenyButton: true,
+                        showConfirmButton: false,
                         showCancelButton: true,
                         denyButtonText: `Yes Delete`
                     }).then((result) => {
@@ -242,24 +244,24 @@
                                 url: 'Pay_UploadInstance/DeleteInstance?id=' + Id,
                                 type: 'GET',
                                 success: function (response) {
-                                    if (response == null || response == undefined || response.length == 0) {
-                                        alert('Unable to save the data.' + Id);
+                                    if (response == false) {
+                                        alert('Unable to savexxx the data.' + Id);
                                     } else {
                                         $('#AddProcessEarning').modal('hide');
-                                        setTimeout(function () {
-                                            alert(response);
-                                        }, 5000);
+                                        
+                                            Swal.fire("Record deleted ", "", "success");
+                                        
 
                                         setTimeout(function () {
-                                            alert(response);
-                                        }, 5000);
+                                            document.location.href = 'http://localhost:21840/Pay_UploadInstance';
+                                        }, 1500);
                                     }
                                 },
                                 error: function () {
-                                    alert('Unable to save the data.' + Id);
+                                    alert('Unable to saveee the data.' + Id);
                                 }
                             }).done(function () {
-                                Swal.fire("Record deleted ", "", "info");
+                               
                             });
                         }
                     });
@@ -320,7 +322,11 @@
                 
                 var result = ValidateAddForm();
                 if (result == false) {
-                    alert('All fields are required');
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "Please fill all fields!",
+                    });
                     return false;
                 }
                 ShowGif();
@@ -357,9 +363,7 @@
                             );
                             setTimeout(function () {
                                 document.location.href = 'http://localhost:21840/Pay_UploadInstance';
-                            }, 5000);
-                            
-
+                            }, 1500);
                         }
                     },
                     error: function () {
