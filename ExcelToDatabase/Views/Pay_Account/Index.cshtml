@@ -117,7 +117,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="submit" asp-controller="Pay_UploadInstance" asp-action="Create" id="saveChangesBtn" class="btn btn-primary">Save changes</button>
+                <button type="submit" asp-controller="Pay_UploadInstance" asp-action="Create" id="saveChangesBtn" class="btn btn-primary"><img src="~/bsicons/save.svg" />Save changes</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
@@ -167,7 +167,7 @@
 
                         <div style="padding-top:10px" class="row">
                             <div class="form-floating">
-                                <input type="date" id="edDatepicker" name="selectedDate" class="form-control">
+                                <input type="text" id="edDatepicker" name="selectedDate" class="form-control">
                                 <label for="edDatepicker">Date*</label>
                             </div>
                         </div>
@@ -176,7 +176,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="submit" asp-controller="Pay_UploadInstance" asp-action="Create" id="edSaveChangesBtn" class="btn btn-primary">Save changes</button>
+                <button type="submit" asp-controller="Pay_UploadInstance" asp-action="Create" id="edSaveChangesBtn" class="btn btn-primary"><img src="~/bsicons/save.svg" />Save changes</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
@@ -445,7 +445,14 @@
                             FillAccountGL00100DropDownsType(response.actindx, response.actdescr);
                             FillPaypointDropDownsType(response.payPointId, response.payPointDescription);
                             FillAccountEarningDropDownsType(response.earningId, response.earning);
-                            GetDate(response.dateCreated);
+
+                            $('#edDatepicker').val(GetDate(response.dateCreated));
+
+                            $('#edDatepicker').datepicker({
+                                dateFormat: 'yy-mm-dd'
+                            });
+
+
                             
                             // Display modal
                             $('#modalManageAcc').modal('show');
@@ -545,9 +552,7 @@
                 });
             }
 
-            function GetDate(dateCreated) {
-                $(function () {
-                    
+            function GetDate(dateCreated) {                   
 
                     var dateDd = $("#edDatepicker");
 
@@ -559,19 +564,19 @@
                     var month = dateObj.getMonth() + 1;
                     var day = dateObj.getDate();
                     var year = dateObj.getFullYear();
-                    var formattedDate = month + '/' + day + '/' + year;
+                    var formattedDate = year + '/' + month + '/' + day;
 
+                    return formattedDate;
                     
 
                     // Set the value of the date input field
-                    dateDd.val(formattedDate);
+                    // dateDd.val(formattedDate);
 
-                    // Initialize the datepicker
-                    dateDd.datepicker({
-                        dateFormat: 'mm/dd/yy'
-                    });
-                    alert('The new date :' + formattedDate);
-                });
+                    // // Initialize the datepicker
+                    // dateDd.datepicker({
+                    //     dateFormat: 'yy/mm/dd'
+                    // });
+                    // alert('The new date :' + formattedDate);
             }
 
 
