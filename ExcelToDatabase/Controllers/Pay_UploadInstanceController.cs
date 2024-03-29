@@ -399,11 +399,21 @@ namespace ExcelToDatabase.Controllers
                     Site = instance.Site.Trim(),
                     DateCreated = instance.DateCreated
                 };
-                TempData["instanceDetails"] = $"   <strong>    Month</strong> : {insData.MonthName}      <strong>Year</strong> : {insData.Year}      <strong>Site</strong> : {insData.Site}      <strong>Date</strong> : {insData.DateCreated}";
+
+                var date = insData.DateCreated.ToString();
+
+                char[] arrayStr =  date.ToCharArray();
+
+                var indx = Array.LastIndexOf(arrayStr,'/')+5;
+                TempData["instanceDetails"] = 
+                    $" &nbsp;&nbsp;    Month : <strong> {insData.MonthName} </strong>" +
+                    $" &nbsp;&nbsp;    Year : <strong>{insData.Year}</strong>" +
+                    $" &nbsp;&nbsp;    Site : <strong>{insData.Site}</strong>" +
+                    $" &nbsp;&nbsp;    Date : <strong>{insData.DateCreated.ToString().Substring(0, indx)}</strong>";
 
             }
             var items = await _context.Pay_Deduction.Where(m => m.UploadInstanceId == id).ToListAsync();
-            return View(items);
+            return View(items); 
         }
 
         [HttpGet]

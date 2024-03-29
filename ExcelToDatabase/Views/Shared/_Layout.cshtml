@@ -15,7 +15,7 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-black border-bottom box-shadow mb-3">
             <div class="container-fluid">
-            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Omusati Regional Council</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"> <img src="~/orc_icon.jfif" style="height:30px" /> Omusati Regional Council</a>
             </div>
         </nav>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
@@ -60,7 +60,8 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; @DateTime.UtcNow.Year.ToString() - Kinetic Wizard Software Solutions - All rights reserved. - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <a onclick="window.open('https://kineticwizard.com.na/','_blank','height=400,width=400')">&copy; @DateTime.UtcNow.Year.ToString() - Kinetic Wizard Software Solutions - All rights reserved. -</a>
+             <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
 
