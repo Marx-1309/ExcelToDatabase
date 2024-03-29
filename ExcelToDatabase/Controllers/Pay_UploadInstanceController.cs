@@ -419,6 +419,29 @@ namespace ExcelToDatabase.Controllers
         [HttpGet]
         public async Task<IActionResult> GetIndividualEarningsListByUploadInstanceId(int Id)
         {
+            var instance = await _context.Pay_UploadInstance.Where(r => r.UploadInstanceID == Id).FirstOrDefaultAsync();
+            if (instance != null)
+            {
+                var insData = new
+                {
+                    MonthName = await _context.Pay_Month.Where(r => r.MonthId == instance.MonthId).Select(r => r.MonthName.ToString().Trim()).FirstOrDefaultAsync(),
+                    Year = instance.Year,
+                    Site = instance.Site.Trim(),
+                    DateCreated = instance.DateCreated
+                };
+
+                var date = insData.DateCreated.ToString();
+
+                char[] arrayStr = date.ToCharArray();
+
+                var indx = Array.LastIndexOf(arrayStr, '/') + 5;
+                TempData["instanceDetails"] =
+                                                $" &nbsp;&nbsp;    Month : <strong> {insData.MonthName} </strong>" +
+                                                $" &nbsp;&nbsp;    Year : <strong>{insData.Year}</strong>" +
+                                                $" &nbsp;&nbsp;    Site : <strong>{insData.Site}</strong>" +
+                                                $" &nbsp;&nbsp;    Date : <strong>{insData.DateCreated.ToString().Substring(0, indx)}</strong>";
+
+            }
             var items = await _context.Pay_VIP.Where(m => m.UploadInstanceId == Id).ToListAsync();
             return View(items);
         }

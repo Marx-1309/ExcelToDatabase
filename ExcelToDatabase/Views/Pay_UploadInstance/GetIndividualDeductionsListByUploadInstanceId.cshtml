@@ -16,26 +16,28 @@
     </div>
 </div> *@
 
-<div class="accordion" id="accordionExample" style="padding-bottom:10px;" >
-    <div class="accordion-item">
-        <h2 class="accordion-header" id="headingOne">
-            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                <a><img src="~/bsicons/info-circle-fill.svg" /> Instance Details</a>
-            </button>
-        </h2>
-        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-            <div class="accordion-body">
-                @* <button id="btnProcess" type="button" class="btn btn-primary" style="flex-shrink: 0;"><img src="~/bsicons/plus-lg.svg" /> Add new</button> *@
-                @Html.Raw(instData);
-            </div>
-        </div>
-    </div>
 
-</div>
 
 <div class="card bg-light mb-3" style="max-width: 100rem;">
     <div class="card-header"><b>Individual Deductions </b></div>
+
     <div class="card-body">
+        <div class="accordion" id="accordionExample" style="padding-bottom:10px;">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                        <a><img src="~/bsicons/info-circle-fill.svg" /> Instance Details</a>
+                    </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        @* <button id="btnProcess" type="button" class="btn btn-primary" style="flex-shrink: 0;"><img src="~/bsicons/plus-lg.svg" /> Add new</button> *@
+                        @Html.Raw(instData);
+                    </div>
+                </div>
+            </div>
+
+        </div>
 
         <table class="table" id="IndividualDeductionsListByUploadInstanceId">
     <thead>
