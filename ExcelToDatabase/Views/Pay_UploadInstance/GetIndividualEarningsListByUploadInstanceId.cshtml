@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "GetIndividualEarningsListByUploadInstanceId";
+    var instData = @TempData["instanceDetails"];
 }
 
 
@@ -18,7 +19,7 @@
                 <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                     <div class="accordion-body">
                         @* <button id="btnProcess" type="button" class="btn btn-primary" style="flex-shrink: 0;"><img src="~/bsicons/plus-lg.svg" /> Add new</button> *@
-@*                         @Html.Raw(instData); *@
+                         @Html.Raw(instData); 
                     </div>
                 </div>
             </div>
@@ -61,7 +62,7 @@
                             <div class="dropdown">
                                 <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"></a>
                                 <div class="dropdown-menu">
-                                    <a href="#" class="dropdown-item btnManageAcc" data-actindx="@item.EmployeeCode"><img src="~/bsicons/pencil.svg" />Edit Details</a>
+                                    <a href="#" class="dropdown-item btnManageAcc btnSeeDetails" data-empcode="@item.EmployeeCode"><img src="~/bsicons/pencil.svg" />See Details</a>
                                     <!--<a href="#" class="dropdown-item btnManageAcc"  data-actindx="@item.EmployeeCode">Manage Account</a>-->
 
                                 </div>
@@ -73,10 +74,59 @@
 </table>
 </div>
 </div>
+
+@* <!-- Modal -->
+<div class="modal" id="employeeEarningDetailsBtn" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalScrollable">
+    Launch demo modal
+</button> *@
+
+<!-- Modal -->
+<div class="modal fade" id="employeeEarningDetailsBtn" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalScrollableTitle">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet" />
 <link href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+
 
 @section Scripts {
     <script type="text/javascript">
@@ -84,6 +134,93 @@
             setTimeout(function () {
                 $('#tblIndividualEarningsListByUploadInstanceId').DataTable();
             }, 1500);
+
+            $('.btnSeeDetails').click(function () {
+
+                var empId = $(this).attr('data-empcode'); // Retrieve the ACTINDX value from data-actindx attribute
+                GetEmployeeEarnings(empId); // Call the function with ACTINDX as argument
+            });
+
+            function GetEmployeeEarnings(empId) {
+                $.ajax({
+                    url: '/pay_UploadInstance/GetEmployeeEarningsByCode?Id=' + empId,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    success: function (response) {
+                        $('#employeeEarningDetailsBtn').modal('show');
+
+                        var tableHTML = "<table style='border-collapse: collapse; border: 1px solid lightgrey;'>";
+                        tableHTML += "<thead style='background-color: lightgrey;'>";
+                        tableHTML += "<tr><th style='width: 200px; border: 1px solid lightgrey;'>Property</th><th style='width: 200px; border: 1px solid lightgrey;'>Value</th></tr>";
+                        tableHTML += "</thead>";
+                        tableHTML += "<tbody>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>EmployeeCode</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.employeeCode + "</strong></td></tr>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>Surname</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.surname + "</strong></td></tr>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>FullNames</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.fullNames + "</strong></td></tr>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>PayPoint</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.payPoint + "</strong></td></tr>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>EDSALARY</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.edsalary + "</strong></td></tr>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>EDANNUALBONUS</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.edannualbonus + "</strong></td></tr>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>EDSUBSIDYNON_TAX</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.EDSUBSIDYNON_TAX + "</strong></td></tr>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>EDSUBSIDYTAXABLE</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.edsubsidytaxable + "</strong></td></tr>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>EDCARALLTAXABLE</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.edcaralltaxable + "</strong></td></tr>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>EDCARALLNONTAX</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.edcarallnontax + "</strong></td></tr>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>EDOVERTIME1_5</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.edovertime1_5 + "</strong></td></tr>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>EDOVERTIME2_0</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.edovertime2_0 + "</strong></td></tr>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>EDLEAVEPAIDOUT</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.edleavepaidout + "</strong></td></tr>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>EDUNPAIDLEAVE</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.edunpaidleave + "</strong></td></tr>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>EDBACKPAYSALARY</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.edbackpaysalary + "</strong></td></tr>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>EDACTINGALL</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.edactingall + "</strong></td></tr>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>EDTELEPHONEALL</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.edtelephoneall + "</strong></td></tr>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>EDFURNITUREALL</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.edfurnitureall + "</strong></td></tr>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>EDWATER_ELEC</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.edwater_elec + "</strong></td></tr>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>EDTRAVELALL</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.edtravelall + "</strong></td></tr>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>EDHOUSING</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.edhousing + "</strong></td></tr>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>EDREFUNDS</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.edrefunds + "</strong></td></tr>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>EDCARRUNNINGCOS</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.edcarrunningcos + "</strong></td></tr>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>EDRENTALALLOWANC</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.edrentalallowanc + "</strong></td></tr>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>EDTRANSPORTALLOW</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.edtransportallow + "</strong></td></tr>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>EDCASHBONUS</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.edcashbonus + "</strong></td></tr>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>EDS_TCLAIM</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.ed_s_tclaim + "</strong></td></tr>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>EDSEPARATIONGRAT</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.edseparationgrat + "</strong></td></tr>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>EDS_TCLAIM_2</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.ed_s_tclaim_2 + "</strong></td></tr>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>EDREMOTENESSALLO</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.edremotenessallo + "</strong></td></tr>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>EDREMOTENESSALL</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.edremotenessall + "</strong></td></tr>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>EDCASHBONUS_2</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.edcashbonus_2 + "</strong></td></tr>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>EDALLOBACKPAY</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.edallobackpay + "</strong></td></tr>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>EDBACKPAYNONTAX</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.edbackpaynontax + "</strong></td></tr>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>EDBACKPAYTAXABLE</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.edbackpaytaxable + "</strong></td></tr>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>EDBACKPAYBONUS</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.edbackpaybonus + "</strong></td></tr>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>EDFIXEDOVERTIME</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.edfixedovertime + "</strong></td></tr>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>EDT_SHIRTREFUND</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.edt_shirtrefund + "</strong></td></tr>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>EDOVERTIMBACKPAY</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.edovertimbackpay + "</strong></td></tr>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>EDHOUSALLBACKPAY</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.edhousallbackpay + "</strong></td></tr>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>EDTRANSBACKPAY</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.edtransbackpay + "</strong></td></tr>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>EDACTINGBACKPAY</td><td style='width:200px; border: 1px solid lightgrey;'><strong>" + response.edactingbackpay + "</strong></td></tr>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>EDCASHBBACKPAY</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.edcashbbackpay + "</strong></td></tr>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>EDREMOTENESSBP</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.edremotenessbp + "</strong></td></tr>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>EDBACKPAYSUBSIDY</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.edbackpaysubsidy + "</strong></td></tr>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>EDHOUSINGNONTAX</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.edhousingnontax + "</strong></td></tr>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>EDHOUSINGTAXABLE</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.edhousingtaxable + "</strong></td></tr>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>EDBPMANNONTAX</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.edbpmannontax + "</strong></td></tr>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>EDBPMANTAXABLE</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.edbpmanentaxable + "</strong></td></tr>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>EDCARALLBPTAX</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.edcarallbptax + "</strong></td></tr>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>EDCARALLBPN_TAX</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.edcarallbpn_tax + "</strong></td></tr>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>EDRUNCOSTBP</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.edruncostbp + "</strong></td></tr>";
+                        tableHTML += "</tbody>";
+                        tableHTML += "</table>";
+
+                        $('.modal-body').html(tableHTML)
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
+                        console.error('Status: ' + status);
+                        console.error('Error: ' + error);
+                        alert('Error');
+                    }
+                });
+
+            };
 
         });
     </script>

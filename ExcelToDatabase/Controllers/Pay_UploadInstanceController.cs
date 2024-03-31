@@ -531,6 +531,33 @@ namespace ExcelToDatabase.Controllers
             }
             
         }
+        [HttpGet]
+        public JsonResult GetEmployeeDeductionsByCode(int Id)
+        {
+            if(Id == 0)
+            {
+                return Json("Invalid employee code");
+            }
+            else
+            {
+                return Json(_context.Pay_Deduction.AsNoTracking().Where(r => r.EmployeeCode == Id).FirstOrDefaultAsync().GetAwaiter().GetResult());
+            }
+        }
+
+        [HttpGet]
+        public JsonResult GetEmployeeEarningsByCode(int Id)
+        {
+            if (Id == 0)
+            {
+                return Json("Invalid employee code");
+            }
+            else
+            {
+                return Json(_context.Pay_VIP.AsNoTracking().Where(r => r.EmployeeCode == Id).FirstOrDefaultAsync().GetAwaiter().GetResult());
+                
+            }
+            return Json("");
+        }
 
         //// POST: Pay_InstancePayroll/Delete/5
         //[HttpPost, ActionName("Delete")]

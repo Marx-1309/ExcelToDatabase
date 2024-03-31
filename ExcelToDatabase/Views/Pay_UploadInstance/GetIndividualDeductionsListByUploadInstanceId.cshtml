@@ -95,7 +95,7 @@
                                 <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"></a>
                                 <div class="dropdown-menu">
                                     <a href="#" class="dropdown-item btnManageAcc" data-actindx="@item.EmployeeCode"><img src="~/bsicons/pencil.svg" /> Edit Details</a>
-                                    <a href="#" class="dropdown-item btnManageAcc" data-actindx="@item.EmployeeCode"><img src="~/bsicons/eye.svg" /> See Details</a>
+                                    <a href="#" class="dropdown-item btnManageAcc btnSeeDetails" data-empcode="@item.EmployeeCode" ><img src="~/bsicons/eye.svg" /> See Details</a>
                                     <a href="#" class="dropdown-item btnManageAcc" data-actindx="@item.EmployeeCode"><img /><img src="~/bsicons/trash.svg" /> Delete Details</a>
                                     <!--<a href="#" class="dropdown-item btnManageAcc"  data-actindx="@item.EmployeeCode">Manage Account</a>-->
 
@@ -108,9 +108,9 @@
 </table>
 </div>
 </div>
-
+<a  asp-controller="Pay_UploadInstance" asp-action="index"><img src="~/bsicons/arrow-down-left.svg" />Go back</a>
 <!-- Modal -->
-@* <div class="modal" id="employeeEarningDetailsBtn" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+<div class="modal" id="employeeDeductionDetailsBtn" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -122,39 +122,6 @@
             <div class="modal-body">
                 Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
 
-                Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.
-
-                Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.
-
-                Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
-
-                Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.
-
-                Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.
-
-                Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
-
-                Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.
-
-                Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.
-
-                Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
-
-                Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.
-
-                Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.
-
-                Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
-
-                Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.
-
-                Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.
-
-                Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
-
-                Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.
-
-                Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -162,18 +129,62 @@
             </div>
         </div>
     </div>
-</div> *@
+</div>
 
-
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet" />
+<link href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
 
 
 @section Scripts {
     <script type="text/javascript">
         $(document).ready(function () {
-          
             setTimeout(function () {
                 $('#IndividualDeductionsListByUploadInstanceId').DataTable();
             }, 1000);
+
+            $('.btnSeeDetails').click(function () {
+
+                var empId = $(this).attr('data-empcode'); // Retrieve the ACTINDX value from data-actindx attribute
+                GetEmployeeDeductions(empId); // Call the function with ACTINDX as argument
+            });
+
+            function GetEmployeeDeductions(empId) {
+                    $.ajax({
+                        url: '/pay_UploadInstance/GetEmployeeDeductionsByCode?Id=' + empId,
+                        type: 'GET',
+                        contentType: 'application/json; charset=utf-8',
+                        dataType: 'json',
+                        success: function (response) {
+                            $('#employeeDeductionDetailsBtn').modal('show');
+
+                        var tableHTML = "<table style='border-collapse: collapse; border: 1px solid lightgrey;'>";
+                        tableHTML += "<thead style='background-color: lightgrey;'>";
+                        tableHTML += "<tr><th style='width: 200px; border: 1px solid lightgrey;'>Property</th><th style='width: 200px; border: 1px solid lightgrey;'>Value</th></tr>";
+                        tableHTML += "</thead>";
+                        tableHTML += "<tbody>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>Surname</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.surname + "</strong></td></tr>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>Full Names</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.fullNames + "</strong></td></tr>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>Pay Point</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.payPoint + "</strong></td></tr>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>DD Social Security</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.ddSocialSecurity + "</strong></td></tr>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>DD Pension</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.ddPension + "</strong></td></tr>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>CC Social Security</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.ccSocialSecurity + "</strong></td></tr>";
+                        tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>CC Pension</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.ccPension + "</strong></td></tr>";
+
+
+                        $('.modal-body').html(tableHTML)
+                        },
+                        error: function (xhr, status, error) {
+                            console.error(xhr.responseText);
+                            console.error('Status: ' + status);
+                            console.error('Error: ' + error);
+                            alert('Error');
+                        }
+                    });
+                
+            };
+
         });
     </script>
-        };
+        }
