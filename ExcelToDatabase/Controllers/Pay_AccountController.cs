@@ -231,8 +231,7 @@ namespace ExcelToDatabase.Controllers
         {
             if(ModelState.IsValid)
             {
-                var accId = "rrr";
-                if (accId != null)
+                try
                 {
                     _context.Pay_Accounts.Update(model);
                     int isEntityModified = _context.SaveChanges();
@@ -241,11 +240,14 @@ namespace ExcelToDatabase.Controllers
                         return Json("Record update success");
                     }
                     return Json("No changes made");
-
+                }
+                catch (Exception ex)
+                {
+                    return Json(false,$"Unable to save,error : {ex.InnerException.Message.ToString()}");
                 }
             }
             
-            return Json("");
+            return Json("Please fill all fields");
         }
 
         [HttpGet]
