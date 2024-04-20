@@ -241,42 +241,51 @@
 
                 if ($('#accountDropdown').val().trim() == "") {
                     //$('#lblAccount').html()[0].empty();
-                    
-                    $('#lblAccount').append(" *").css('color', 'Red');
+                    $('#lblAccount').empty();
+                    $('#lblAccount').append("Account *").css('color', 'Red');
                     $('#accountDropdown').css('border-color', 'Red');
                     isValid = false;
                 }
                 else {
                     $('#accountDropdown').css('border-color', 'lightgrey');
+                    $('#lblAccount').empty();
+                    $('#lblAccount').append("Account").css('color', 'Black');
                 }
 
                 if ($('#paypointDropdown').val().trim() == "") {
-                    $('#lblPaypointDropdown').append(" *").css('color', 'Red');
+                    $('#lblPaypointDropdown').empty();
+                    $('#lblPaypointDropdown').append("Paypoint *").css('color', 'Red');
                     $('#paypointDropdown').css('border-color', 'Red');
                     isValid = false;
                 }
                 else {
                     $('#paypointDropdown').css('border-color', 'lightgrey');
+                    $('#lblPaypointDropdown').empty();
+                    $('#lblPaypointDropdown').append("Paypoint").css('color', 'Black');
                 }
 
                 if ($('#earningDropdown').val().trim() == "") {
                     $('#lblEarningDropdown').empty();
-                    $('#lblEarningDropdown').append("EarningDropdown *").css('color', 'Red');
+                    $('#lblEarningDropdown').append("Earning *").css('color', 'Red');
                     $('#earningDropdown').css('border-color', 'Red');
                     isValid = false;
                 }
                 else {
                     $('#earningDropdown').css('border-color', 'lightgrey');
+                    $('#lblEarningDropdown').empty();
+                    $('#lblEarningDropdown').append("Earning").css('color', 'Black');
                 }
 
                 if ($('#datepicker').val().trim() == "") {
                     $('#lblDate').empty();
-                    $('#lblDate').append(" *").css('color', 'Red');
+                    $('#lblDate').append("Date *").css('color', 'Red');
                     $('#datepicker').css('border-color', 'Red');
                     isValid = false;
                 }
                 else {
                     $('#datepicker').css('border-color', 'lightgrey');
+                    $('#lblDate').empty();
+                    $('#lblDate').append("Date").css('color', 'Black');
                 }
                 return isValid;
             };
