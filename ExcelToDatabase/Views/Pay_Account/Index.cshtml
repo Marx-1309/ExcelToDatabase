@@ -77,7 +77,7 @@
                                         <option value="@account.ACTINDX">@account.ACTDESCR</option>
                                     }
                                 </select>
-                                <label for="accountDropdown">Account</label>
+                                <label id="lblAccount" for="accountDropdown">Account</label>
                             </div>
                         </div>
                         <div style="padding-top:10px" class="row">
@@ -90,7 +90,7 @@
                                         <option value="@paypoint.PayPointId">@paypoint.PayPointDescription</option>
                                     }
                                 </select>
-                                <label for="paypointDropdown">PayPoint</label>
+                                <label id="lblPaypointDropdown" for="paypointDropdown">PayPoint</label>
                             </div>
                         </div>
                         <div style="padding-top:10px" class="row">
@@ -103,13 +103,13 @@
                                         <option value="@earning.EarningId">@earning.Earning</option>
                                     }
                                 </select>
-                                <label for="earningDropdown">Earning</label>
+                                <label id="lblEarningDropdown" for="earningDropdown">Earning</label>
                             </div>
                         </div>
                         <div style="padding-top:10px" class="row">
                             <div class="form-floating">
                                 <input type="text" id="datepicker"  name="selectedDate" class="form-control">
-                                <label for="datepicker">Date</label>
+                                <label id="lblDate" for="datepicker">Date</label>
                             </div>
                         </div>
                     </div>
@@ -237,9 +237,12 @@
             function ValidateAddForm() {
 
                 var isValid = true;
-
+                var str = '*'
 
                 if ($('#accountDropdown').val().trim() == "") {
+                    //$('#lblAccount').html()[0].empty();
+                    
+                    $('#lblAccount').append(" *").css('color', 'Red');
                     $('#accountDropdown').css('border-color', 'Red');
                     isValid = false;
                 }
@@ -248,6 +251,7 @@
                 }
 
                 if ($('#paypointDropdown').val().trim() == "") {
+                    $('#lblPaypointDropdown').append(" *").css('color', 'Red');
                     $('#paypointDropdown').css('border-color', 'Red');
                     isValid = false;
                 }
@@ -256,6 +260,8 @@
                 }
 
                 if ($('#earningDropdown').val().trim() == "") {
+                    $('#lblEarningDropdown').empty();
+                    $('#lblEarningDropdown').append("EarningDropdown *").css('color', 'Red');
                     $('#earningDropdown').css('border-color', 'Red');
                     isValid = false;
                 }
@@ -264,6 +270,8 @@
                 }
 
                 if ($('#datepicker').val().trim() == "") {
+                    $('#lblDate').empty();
+                    $('#lblDate').append(" *").css('color', 'Red');
                     $('#datepicker').css('border-color', 'Red');
                     isValid = false;
                 }
