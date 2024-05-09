@@ -253,7 +253,7 @@
                                         
 
                                         setTimeout(function () {
-                                            document.location.href = 'http://localhost:21840/Pay_UploadInstance';
+                                            document.location.href = 'http://localhost:82/Pay_UploadInstance';
                                         }, 1500);
                                     }
                                 },
@@ -355,6 +355,7 @@
                         if (response == null || response == undefined || response.length == 0) {
                             alert('Unable to save the data.');
                         } else {
+                            HideGif();
                             HidelModal();
                             Swal.fire(
                                 'Good job!',
@@ -362,7 +363,7 @@
                                 'success'
                             );
                             setTimeout(function () {
-                                document.location.href = 'http://localhost:21840/Pay_UploadInstance';
+                                document.location.href = 'http://localhost:82/Pay_UploadInstance';
                             }, 1500);
                         }
                     },
