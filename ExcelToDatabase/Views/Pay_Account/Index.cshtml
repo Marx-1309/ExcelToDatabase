@@ -106,12 +106,12 @@
                                 <label id="lblEarningDropdown" for="earningDropdown">Earning</label>
                             </div>
                         </div>
-                        <div style="padding-top:10px" class="row">
+@*                         <div style="padding-top:10px" class="row">
                             <div class="form-floating">
                                 <input type="text" id="datepicker"  name="selectedDate" class="form-control">
                                 <label id="lblDate" for="datepicker">Date</label>
                             </div>
-                        </div>
+                        </div> *@
                     </div>
 
                 </div>
@@ -165,12 +165,12 @@
                         </div>
 
 
-                        <div style="padding-top:10px" class="row">
+@*                         <div style="padding-top:10px" class="row">
                             <div class="form-floating">
                                 <input type="text" id="edDatepicker" name="selectedDate" class="form-control" data-select="datepicker">
                                 <label for="edDatepicker">Date</label>
                             </div>
-                        </div>
+                        </div> *@
 
                     </div>
                 </div>
@@ -276,17 +276,17 @@
                     $('#lblEarningDropdown').append("Earning").css('color', 'Black');
                 }
 
-                if ($('#datepicker').val().trim() == "") {
-                    $('#lblDate').empty();
-                    $('#lblDate').append("Date *").css('color', 'Red');
-                    $('#datepicker').css('border-color', 'Red');
-                    isValid = false;
-                }
-                else {
-                    $('#datepicker').css('border-color', 'lightgrey');
-                    $('#lblDate').empty();
-                    $('#lblDate').append("Date").css('color', 'Black');
-                }
+                // if ($('#datepicker').val().trim() == "") {
+                //     $('#lblDate').empty();
+                //     $('#lblDate').append("Date *").css('color', 'Red');
+                //     $('#datepicker').css('border-color', 'Red');
+                //     isValid = false;
+                // }
+                // else {
+                //     $('#datepicker').css('border-color', 'lightgrey');
+                //     $('#lblDate').empty();
+                //     $('#lblDate').append("Date").css('color', 'Black');
+                // }
                 return isValid;
             };
 
@@ -319,13 +319,13 @@
                     $('#edPayPointDropdown').css('border-color', 'lightgrey');
                 }
 
-                if ($('#edDatepicker').val().trim() == "") {
-                    $('#edDatepicker').css('border-color', 'Red');
-                    isValid = false;
-                }
-                else {
-                    $('#edDatepicker').css('border-color', 'lightgrey');
-                }
+                // if ($('#edDatepicker').val().trim() == "") {
+                //     $('#edDatepicker').css('border-color', 'Red');
+                //     isValid = false;
+                // }
+                // else {
+                //     $('#edDatepicker').css('border-color', 'lightgrey');
+                // }
                 return isValid;
             };
             
@@ -334,14 +334,14 @@
                 $('#accountDropdown').val($('#accountDropdown option:first').val());
                 $('#paypointDropdown').val($('#paypointDropdown option:first').val());
                 $('#earningDropdown').val($('#earningDropdown option:first').val());
-                $('#datepicker').val('');
+                // $('#datepicker').val('');
             }
 
             function ClearEditForm() {
                 $('#edGLAccountDropdown').val() == "";
                 $('#edEarningDropdown').val() == "";
                 $('#edPayPointDropdown').val() == "";
-                $('#edDatepicker').val() == "";
+                // $('#edDatepicker').val() == "";
             }
 
             $('#btnProcess').click(function () {
@@ -378,7 +378,7 @@
                 formData.ACTINDX = $('#edGLAccountDropdown option:selected').val();
                 formData.PayPointId = $('#edPayPointDropdown option:selected').val();
                 formData.EarningId = $('#edEarningDropdown option:selected').val();
-                formData.DateCreated = $('#edDatepicker').val();
+                //formData.DateCreated = $('#edDatepicker').val();
                 formData.accountId = $(".btnManageAcc").attr('data-accountid');
                 //formData.accountId = GetAccountId();
 
@@ -424,7 +424,7 @@
                 formData.ACTINDX = $('#accountDropdown option:selected').val();
                 formData.PayPointId = $('#paypointDropdown option:selected').val();
                 formData.EarningId = $('#earningDropdown option:selected').val();
-                formData.DateCreated = $('#datepicker').val();
+                //formData.DateCreated = $('#datepicker').val();
 
                 $.ajax({
                     url: 'pay_Account/Create',
@@ -432,23 +432,31 @@
                     type: 'post',
                     success: function (response) {
                         if (response == null || response == undefined || response.length == 0) {
-                            alert('Unable to save the data.');
+                            Swal.fire(
+                                'Good job!',
+                                response,
+                                'success'
+                            );
                         } else {
-                            $('#AddProcessEarning').modal('hide');
-                            setTimeout(function () {
-                                alert(response);
-                            }, 5000);
+                            $('#modalManageAcc').modal('hide');
+                            Swal.fire(
+                                'Good jobs!',
+                                response,
+                                'success'
+                            );
 
                             setTimeout(function () {
-                                alert(response);
-                            }, 5000);
-                            document.location.href = 'http://localhost:21840/Pay_Account';
-
+                                document.location.href = 'http://localhost:21840/Pay_Account';
+                            }, 1500);
                         }
                     },
                     error: function () {
 
-                        alert('Unable to save the data.');
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: "Record could not be saved!",
+                        });
                     }
                 });
 
@@ -476,8 +484,8 @@
                             FillPaypointDropDownsType(response.payPointId, response.payPointDescription);
                             FillAccountEarningDropDownsType(response.earningId, response.earning);
 
-                            $('#edDatepicker').val(GetDate(response.dateCreated));
-                            $('#edDatepicker').dateTimePicker();
+                            // $('#edDatepicker').val(GetDate(response.dateCreated));
+                            // $('#edDatepicker').dateTimePicker();
 
                             // Display modal
                             $('#modalManageAcc').modal('show');
@@ -577,18 +585,18 @@
                 });
             }
 
-            function GetDate(dateCreated) {                   
-                    var initialDate = dateCreated;
+            // function GetDate(dateCreated) {                   
+            //         var initialDate = dateCreated;
 
-                    // Convert the date to mm/dd/yyyy format
-                    var dateObj = new Date(initialDate);
-                    var month = dateObj.getMonth() + 1;
-                    var day = dateObj.getDate();
-                    var year = dateObj.getFullYear();
-                    var formattedDate = year + '/' + month + '/' + day;
+            //         // Convert the date to mm/dd/yyyy format
+            //         var dateObj = new Date(initialDate);
+            //         var month = dateObj.getMonth() + 1;
+            //         var day = dateObj.getDate();
+            //         var year = dateObj.getFullYear();
+            //         //var formattedDate = year + '/' + month + '/' + day;
 
-                    return formattedDate;
-            }
+            //         return formattedDate;
+            // }
 
 
             function GetAccountId() {
@@ -597,7 +605,7 @@
                 formData.ACTINDX = $('#edGLAccountDropdown option:selected').val();
                 formData.PayPointId = $('#edPayPointDropdown option:selected').val();
                 formData.EarningId = $('#edEarningDropdown option:selected').val();
-                formData.DateCreated = $('#edDatepicker').val();
+                //formData.DateCreated = $('#edDatepicker').val();
 
                 $.ajax({
                     url: 'pay_Account/GetAccountId',

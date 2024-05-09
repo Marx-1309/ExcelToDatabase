@@ -209,10 +209,22 @@ namespace ExcelToDatabase.Controllers
             {
                 if (record != null)
                 {
-                     _context.Add(record);
+                    var existigRecord =  _context.Pay_Accounts.Where(r=>r.EarningId == record.EarningId 
+                    && r.ACTINDX == record.ACTINDX 
+                    && r.PayPointId == record.PayPointId).ToListAsync().GetAwaiter().GetResult();
+                    if(existigRecord.Count> 0)
+                    {
+                        return Json(false,"An account with same configurations exist");
+                    }
+
+                    record.DateCreated = DateTime.Today;
+                    Task.Delay(500).GetAwaiter().GetResult();
+                    _context.Add(record);
+                     Task.Delay(500).GetAwaiter().GetResult();
                      var s = _context.SaveChangesAsync().GetAwaiter().GetResult;
+                    Task.Delay(500).GetAwaiter().GetResult();
                     TempData["success"] = "Success Upload";
-                    return Json("");
+                    return Json("Record added success");
                 }
                 return Json("Unable to save , record is empty");
             }
@@ -233,6 +245,14 @@ namespace ExcelToDatabase.Controllers
             {
                 try
                 {
+                    var existigRecord = _context.Pay_Accounts.Where(r => r.EarningId == model.EarningId
+                    && r.ACTINDX == model.ACTINDX
+                    && r.PayPointId == model.PayPointId).ToListAsync().GetAwaiter().GetResult();
+                    if (existigRecord.Count > 0)
+                    {
+                        return Json(false, "An account with same configurations exist");
+                    }
+
                     _context.Pay_Accounts.Update(model);
                     int isEntityModified = _context.SaveChanges();
                     if (isEntityModified > 0)
