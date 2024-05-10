@@ -390,7 +390,7 @@
                     type: 'post',
                     success: function (response) {
                         if (response == null || response == undefined || response.length == 0) {
-                            alert('Unable to save the data.');
+                            alert(' to save the data.');
                         } else {
                             $('#modalManageAcc').modal('hide');
                             Swal.fire(
@@ -399,7 +399,8 @@
                                 'success'
                             );
                             setTimeout(function () {
-                                document.location.href = 'http://localhost:82/Pay_Account';
+                                //document.location.href = 'http://localhost:82/Pay_Account';
+                                location.reload();
                             }, 1500);
                         }
                     },
@@ -446,7 +447,8 @@
                             );
 
                             setTimeout(function () {
-                                document.location.href = 'http://localhost:82/Pay_Account';
+                                // document.location.href = 'http://localhost:82/Pay_Account';
+                                location.reload();
                             }, 1500);
                         }
                     },

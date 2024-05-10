@@ -95,7 +95,7 @@ namespace ExcelToDatabase.Controllers
             }
             try
             {
-                Pay_Account accountRecord = _context.Pay_Accounts.FirstOrDefault(m => m.ACTINDX == id);
+                Pay_Account accountRecord =  _context.Pay_Accounts.FirstAsync(m => m.ACTINDX == id).GetAwaiter().GetResult();
 
                 var anonymousRec = new
                 {
@@ -229,6 +229,7 @@ namespace ExcelToDatabase.Controllers
             {
                 if (record != null)
                 {
+                    record.DateCreated =  DateTime.UtcNow.Date;
                     var existigRecord =  _context.Pay_Accounts.Where(r=>r.EarningId == record.EarningId 
                     && r.ACTINDX == record.ACTINDX 
                     && r.PayPointId == record.PayPointId).ToListAsync().GetAwaiter().GetResult();
@@ -237,12 +238,9 @@ namespace ExcelToDatabase.Controllers
                         return Json(false,"An account with same configurations exist");
                     }
 
-                    record.DateCreated = DateTime.Today;
-                    Task.Delay(500).GetAwaiter().GetResult();
+                    //record.DateCreated = DateTime.Today;
                     _context.Add(record);
-                     Task.Delay(500).GetAwaiter().GetResult();
-                     var s = _context.SaveChangesAsync().GetAwaiter().GetResult;
-                    Task.Delay(500).GetAwaiter().GetResult();
+                    _context.SaveChangesAsync().GetAwaiter().GetResult();
                     TempData["success"] = "Success Upload";
                     return Json("Record added success");
                 }
@@ -261,8 +259,6 @@ namespace ExcelToDatabase.Controllers
         [HttpPost]
         public JsonResult Edit(Pay_Account model)
         {
-            if(ModelState.IsValid)
-            {
                 try
                 {
                     var existigRecord = _context.Pay_Accounts.Where(r => r.EarningId == model.EarningId
@@ -274,19 +270,15 @@ namespace ExcelToDatabase.Controllers
                     }
 
                     _context.Pay_Accounts.Update(model);
-                    int isEntityModified = _context.SaveChanges();
-                    if (isEntityModified > 0)
-                    {
-                        return Json("Record update success");
-                    }
-                    return Json("No changes made");
+                    _context.SaveChangesAsync().GetAwaiter().GetResult();
+
+                return Json("Record update success");
+ 
                 }
                 catch (Exception ex)
                 {
                     return Json(false,$"Unable to save,error : {ex.InnerException.Message.ToString()}");
                 }
-            }
-            
             return Json("Please fill all fields");
         }
 
