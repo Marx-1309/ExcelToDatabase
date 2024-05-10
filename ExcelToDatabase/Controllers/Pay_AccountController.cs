@@ -26,9 +26,29 @@ namespace ExcelToDatabase.Controllers
         {
             var linkedAccountsId = await _context.Pay_Accounts.Where(x => x.AccountId > 0).Select(r=>r.ACTINDX).ToListAsync();
 
-            var linkedGlAccounts = await _context.GL00100.Where(x => x.ACCATNUM == 10 && linkedAccountsId.Contains(x.ACTINDX)).ToListAsync();
+            //var linkedGlAccounts = await _context.GL00100.Where(x => x.ACCATNUM == 10 && linkedAccountsId.Contains(x.ACTINDX)).ToListAsync();
 
-            var allGlAccounts = await _context.GL00100.Where(x => x.ACCATNUM == 10).ToListAsync();
+            //var linkedGlAccounts = await _context.GL00100
+            //.Where(gl => linkedAccountsId.Contains(gl.ACTINDX) && gl.ACCATNUM == 10)
+            //.ToListAsync();
+
+            //var linkedGlAccounts = await _context.GL00100
+            //                            .Where(gl => linkedAccountsId.Contains(gl.ACTINDX) && gl.ACCATNUM == 10)
+            //                            .GroupBy(gl => gl.ACTDESCR)
+            //                            .Select(group => group.First())
+            //                            .ToListAsync();
+
+            List<GL00100> gL00100sList = new List<GL00100>();
+            gL00100sList.Clear();
+            foreach (var gl in linkedAccountsId)
+            {
+                var glrecord = await _context.GL00100.Where(r => r.ACTINDX == gl).FirstOrDefaultAsync();
+                 gL00100sList.Add(glrecord);
+            }
+            
+            var Cb = gL00100sList;
+
+            var allGlAccounts = await _context.GL00100.Where(x => x.ACCATNUM == 10 ).ToListAsync();
 
             var payPoint  = await _context.Pay_Paypoint.ToListAsync();
             var earnings = await _context.Pay_Earning.ToListAsync();
@@ -38,7 +58,7 @@ namespace ExcelToDatabase.Controllers
 
             return View(new AccountVm
             {
-                GL00100s = linkedGlAccounts.Select(account => new GL00100
+                GL00100s = gL00100sList.Select(account => new GL00100
                 {
                     AccountId = account.AccountId,
                     ACTINDX = account.ACTINDX,
