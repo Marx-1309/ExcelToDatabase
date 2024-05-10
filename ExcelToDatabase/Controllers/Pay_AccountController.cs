@@ -45,8 +45,6 @@ namespace ExcelToDatabase.Controllers
                 var glrecord = await _context.GL00100.Where(r => r.ACTINDX == gl).FirstOrDefaultAsync();
                  gL00100sList.Add(glrecord);
             }
-            
-            var Cb = gL00100sList;
 
             var allGlAccounts = await _context.GL00100.Where(x => x.ACCATNUM == 10 ).ToListAsync();
 
