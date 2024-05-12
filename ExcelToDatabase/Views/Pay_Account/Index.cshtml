@@ -1,4 +1,4 @@
-﻿@model ExcelToDatabase.Models.AccountVm
+﻿@model List<ExcelToDatabase.Models.AccountVm>
 
 @{
     ViewData["Title"] = "Index";
@@ -6,6 +6,9 @@
 
 <p>
     <button id="btnProcess" type="button" class="btn btn-primary"><img src="~/bsicons/plus-circle.svg" /> Process Account</button>
+    <br />
+    <br />
+    <button type="button" class="btn btn-secondary btn-sm">Export</button>
 </p>
 
 <div class="card bg-light mb-3" style="max-width: 100rem;">
@@ -16,29 +19,37 @@
             <thead>
                 <tr>
                     <th>
-                        Account
+                        GL Account
                     </th>
                     <th>
-                        Description
+                        Earning
                     </th>
+                    <th>
+                        Paypoint
+                    </th>
+
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model.GL00100s)
+                @foreach (var item in Model)
                 {
                     <tr>
                         <td>
-                            @Html.DisplayFor(modelItem => item.ACTINDX)
+                            @Html.DisplayFor(modelItem => item.GlAccountName)
+                        </td>
+                         <td>
+                            @Html.DisplayFor(modelItem => item.EarningName)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.ACTDESCR)
+                            @Html.DisplayFor(modelItem => item.PayPointName)
                         </td>
                         <td>
                             <div class="dropdown">
                                 <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"></a>
                                 <div class="dropdown-menu">
-                                    <a href="#" class="dropdown-item btnManageAcc" data-actindx="@item.ACTINDX"><img src="~/bsicons/pencil.svg" />Edit Details</a>
+                                    <a href="#" class="dropdown-item btnManageAcc" data-actindx="@item.AccountId"><img src="~/bsicons/pencil.svg" /> Edit Details</a>
+                                    <a href="#" class="dropdown-item btnDeleteAcc" data-actindx="@item.AccountId"><img src="~/bsicons/trash.svg" /> Delete</a>
                                     <!--<a href="#" class="dropdown-item btnManageAcc"  data-actindx="@item.ACTINDX">Manage Account</a>-->
 
                                 </div>
@@ -46,7 +57,6 @@
                         </td>
                     </tr>
                 }
-
             </tbody>
         </table>
     </div>
@@ -85,7 +95,7 @@
 
                                 <select id="paypointDropdown" name="MonthId" class="form-control">
                                     <option value="">-- Select PayPoint --</option>
-                                    @foreach (var paypoint in Model.PayPaypoints)
+                                    @foreach (var paypoint in ViewBag.AllPayPointsDd)
                                     {
                                         <option value="@paypoint.PayPointId">@paypoint.PayPointDescription</option>
                                     }
@@ -98,7 +108,7 @@
 
                                 <select id="earningDropdown" name="EarningId" class="form-control">
                                     <option value="">-- Select Earning Type --</option>
-                                    @foreach (var earning in Model.PayEarnings)
+                                    @foreach (var earning in ViewBag.AllEarningsDd)
                                     {
                                         <option value="@earning.EarningId">@earning.Earning</option>
                                     }
@@ -176,8 +186,10 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="submit" asp-controller="Pay_UploadInstance" asp-action="Create" id="edSaveChangesBtn" class="btn btn-primary"><img src="~/bsicons/save.svg" /> Save changes</button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><img src="~/bsicons/arrow-down-left.svg" /> Close</button>
+                
+                @* <button class="btn btn-danger btnDeleteAcc" data-actid><img src="~/bsicons/trash.svg" /></button> *@
+                <button type="submit" asp-controller="Pay_UploadInstance" asp-action="Create" id="edSaveChangesBtn" class="btn btn-primary"> Save changes</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"> Close</button>
             </div>
         </div>
     </div>
@@ -348,7 +360,7 @@
                 $('#AddProcessEarning').modal('show');
             });
 
-            $('.btnManageAcc, .btnDetailAcc').click(function () {
+            $('.btnManageAcc').click(function () {
                 
                 var ACTINDX = $(this).attr('data-actindx'); // Retrieve the ACTINDX value from data-actindx attribute
                 ManageAccDetails(ACTINDX); // Call the function with ACTINDX as argument
@@ -359,6 +371,19 @@
                 
                 
             });
+
+            $('.btnDeleteAcc').click(function (event) {
+                event.preventDefault();
+                GetAccountId();
+
+                var ACTINDX = $(this).attr('data-actid'); // Retrieve the ACTINDX value from data-actindx attribute
+                alert(ACTINDX);
+
+                DeleteAccDetails(); // Call the function with ACTINDX as argument
+
+
+            });
+
             $('#saveChangesBtn').click(function () {
                 Create();
             });
@@ -379,7 +404,7 @@
                 formData.PayPointId = $('#edPayPointDropdown option:selected').val();
                 formData.EarningId = $('#edEarningDropdown option:selected').val();
                 //formData.DateCreated = $('#edDatepicker').val();
-                formData.accountId = $(".btnManageAcc").attr('data-accountid');
+                formData.accountId = $(".btnManageAcc").attr('data-actindx');
                 //formData.accountId = GetAccountId();
 
 
@@ -406,7 +431,11 @@
                     },
                     error: function () {
 
-                        alert('Unable to save the data.');
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: "A record with same configuration seem to exist!",
+                        });
                     }
                 });
             });
@@ -432,17 +461,10 @@
                     data: formData,
                     type: 'post',
                     success: function (response) {
-                        if (response == null || response == undefined || response.length == 0) {
+                        if (response == null || response.length == 0) {
                             Swal.fire(
                                 'Good job!',
-                                response,
-                                'success'
-                            );
-                        } else {
-                            $('#modalManageAcc').modal('hide');
-                            Swal.fire(
-                                'Good jobs!',
-                                response,
+                                'Record added successfully',
                                 'success'
                             );
 
@@ -450,14 +472,22 @@
                                 // document.location.href = 'http://localhost:82/Pay_Account';
                                 location.reload();
                             }, 1500);
+
+                        } else {
+                            $('#modalManageAcc').modal('hide');
+                            Swal.fire(
+                                'Oops...',
+                                response,
+                                'error'
+                            );
+
                         }
                     },
                     error: function () {
-
                         Swal.fire({
                             icon: "error",
                             title: "Oops...",
-                            text: "Record could not be saved!",
+                            text: response,
                         });
                     }
                 });
@@ -492,6 +522,44 @@
                             // Display modal
                             $('#modalManageAcc').modal('show');
                             
+                        }
+                    },
+                    error: function (response) {
+                        alert('getDetailData error');
+                    }
+                });
+            }
+
+            function DeleteAccDetails() {
+
+                var actid = element.getAttribute("data-actid");
+                var earningTypeId;
+                var iearning;
+                alert(actid);
+                // AJAX request to fetch account details
+                $.ajax({
+                    url: 'pay_Account/DeleteAccount?id=' + actid,
+                    type: 'GET',
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response == null || response == undefined || response.length == 0) {
+                            alert('Unable to save the data.');
+                        } else {
+                            earningTypeId = response.earningId;
+                            iearning = response.earning;
+
+                            // Call functions to populate dropdowns
+                            FillAccountGL00100DropDownsType(response.actindx, response.actdescr);
+                            FillPaypointDropDownsType(response.payPointId, response.payPointDescription);
+                            FillAccountEarningDropDownsType(response.earningId, response.earning);
+
+                            // $('#edDatepicker').val(GetDate(response.dateCreated));
+                            // $('#edDatepicker').dateTimePicker();
+
+                            // Display modal
+                            $('#modalManageAcc').modal('show');
+
                         }
                     },
                     error: function (response) {
@@ -618,9 +686,10 @@
                             alert('Unable to fetch the account id.');
                         } else {
 
-                            $(".btnManageAcc").attr("data-accountid", response);
+                            $(".btnManageAcc").attr("data-actid", response);
+                            $(".btnDeleteAcc").attr("data-actid", response);
 
-                           // alert('The id is  ' + response);
+                            //alert('The id is  ' + response);
 
                         }
                     },

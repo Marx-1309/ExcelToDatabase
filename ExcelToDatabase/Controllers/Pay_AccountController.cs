@@ -45,37 +45,41 @@ namespace ExcelToDatabase.Controllers
                 var glrecord = await _context.GL00100.Where(r => r.ACTINDX == gl).FirstOrDefaultAsync();
                  gL00100sList.Add(glrecord);
             }
+            
+            var Cb = gL00100sList;
 
             var allGlAccounts = await _context.GL00100.Where(x => x.ACCATNUM == 10 ).ToListAsync();
-
             var payPoint  = await _context.Pay_Paypoint.ToListAsync();
             var earnings = await _context.Pay_Earning.ToListAsync();
 
             ViewBag.AllGLAccountsDd = allGlAccounts;
+            ViewBag.AllPayPointsDd = payPoint;
+            ViewBag.AllEarningsDd = earnings;
 
+            var accountsvm = await _context.Pay_Accounts.ToListAsync();
 
-            return View(new AccountVm
+            List<AccountVm> accountVms = new List<AccountVm>();
+            GL00100 accountGl = new GL00100();
+
+            foreach (var vm in accountsvm)
             {
-                GL00100s = gL00100sList.Select(account => new GL00100
-                {
-                    AccountId = account.AccountId,
-                    ACTINDX = account.ACTINDX,
-                    ACCATNUM = account.ACCATNUM,
-                    ACTDESCR = account.ACTDESCR?.Trim() 
-                }).ToList(),
-                PayPaypoints = payPoint.Select(paypoint => new Pay_Paypoint
-                {
-                    PayPointId = paypoint.PayPointId,
-                    PayPointCode = paypoint.PayPointCode,
-                    PayPointDescription = paypoint.PayPointDescription?.Trim() 
-                }).ToList(),
-                PayEarnings = earnings.Select(earning => new Pay_Earning
-                {
-                    EarningId = earning.EarningId,
-                    //EarningDescription = earning.EarningDescription?.Trim(),
-                    Earning = earning.Earning?.Trim() 
-                }).ToList()
-            });
+                AccountVm acc = new AccountVm();
+
+                acc.AccountId = (int)vm.AccountId;
+                acc.PayPointId = (int)vm.PayPointId;
+                acc.PayPointName = _context.Pay_Paypoint.Where(p=>p.PayPointId == vm.PayPointId).Select(r=>r.PayPointDescription).FirstOrDefault();
+
+                acc.ACTINDX = (int)vm.ACTINDX;
+                acc.GlAccountName = _context.GL00100.Where(p => p.ACTINDX == vm.ACTINDX).Select(r => r.ACTDESCR).FirstOrDefault();
+
+                acc.EarningId = (int)vm.EarningId;
+                acc.EarningName = _context.Pay_Earning.Where(e=>e.EarningId == vm.EarningId).Select(r=>r.Earning).FirstOrDefault();
+
+                accountVms.Add(acc);
+            }
+            
+
+            return View(accountVms);
 
 
             //return _context.Pay_Account != null ? 
@@ -93,7 +97,7 @@ namespace ExcelToDatabase.Controllers
             }
             try
             {
-                Pay_Account accountRecord =  _context.Pay_Accounts.FirstAsync(m => m.ACTINDX == id).GetAwaiter().GetResult();
+                Pay_Account accountRecord = _context.Pay_Accounts.FirstOrDefault(m => m.AccountId == id);
 
                 var anonymousRec = new
                 {
@@ -233,14 +237,14 @@ namespace ExcelToDatabase.Controllers
                     && r.PayPointId == record.PayPointId).ToListAsync().GetAwaiter().GetResult();
                     if(existigRecord.Count> 0)
                     {
-                        return Json(false,"An account with same configurations exist");
+                        return Json("A record with same configurations exist!");
                     }
 
                     //record.DateCreated = DateTime.Today;
                     _context.Add(record);
                     _context.SaveChangesAsync().GetAwaiter().GetResult();
                     TempData["success"] = "Success Upload";
-                    return Json("Record added success");
+                    return Json("");
                 }
                 return Json("Unable to save , record is empty");
             }
@@ -277,7 +281,6 @@ namespace ExcelToDatabase.Controllers
                 {
                     return Json(false,$"Unable to save,error : {ex.InnerException.Message.ToString()}");
                 }
-            return Json("Please fill all fields");
         }
 
         [HttpGet]
@@ -297,21 +300,27 @@ namespace ExcelToDatabase.Controllers
         }
 
         // GET: Pay_Account/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public JsonResult DeleteAccount(int? id)
         {
-            if (id == null || _context.Pay_Accounts == null)
+            if (id !=0)
             {
-                return NotFound();
-            }
-
-            var pay_Account = await _context.Pay_Accounts
-                .FirstOrDefaultAsync(m => m.ACTINDX == id);
-            if (pay_Account == null)
-            {
-                return NotFound();
-            }
-
-            return View(pay_Account);
+                try
+                {
+                    var record = _context.Pay_Accounts
+                    .FirstOrDefaultAsync(m => m.ACTINDX == id);
+                    if (record != null)
+                    {
+                        _context.Remove(record);
+                        _context.SaveChangesAsync().GetAwaiter().GetResult();
+                        return Json("");
+                    }
+                    return Json("Record Not found!");
+                }
+                catch (Exception ex)
+                {
+                    return Json(false, $"{ex.InnerException}");
+                }
+            }return Json(false, "The id is empty!");
         }
 
         // POST: Pay_Account/Delete/5
