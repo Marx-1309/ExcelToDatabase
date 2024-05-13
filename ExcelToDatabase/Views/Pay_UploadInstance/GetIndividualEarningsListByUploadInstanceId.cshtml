@@ -62,7 +62,7 @@
                             <div class="dropdown">
                                 <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"></a>
                                 <div class="dropdown-menu">
-                                    <a href="#" class="dropdown-item btnManageAcc btnSeeDetails" data-empcode="@item.EmployeeCode"><img src="~/bsicons/pencil.svg" />See Details</a>
+                                    <a href="#" class="dropdown-item btnManageAcc btnSeeDetails" data-empcode="@item.EmployeeCode"><img src="~/bsicons/eye.svg" /> See Details</a>
                                     <!--<a href="#" class="dropdown-item btnManageAcc"  data-actindx="@item.EmployeeCode">Manage Account</a>-->
 
                                 </div>
@@ -106,17 +106,17 @@
     <div class="modal-dialog modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalScrollableTitle">Modal title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+                <h5 class="modal-title" id="exampleModalScrollableTitle">Employee Earnings</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
                 </button>
             </div>
             <div class="modal-body">
                 ...
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                @* <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button> *@
             </div>
         </div>
     </div>
@@ -152,7 +152,7 @@
 
                         var tableHTML = "<table style='border-collapse: collapse; border: 1px solid lightgrey;'>";
                         tableHTML += "<thead style='background-color: lightgrey;'>";
-                        tableHTML += "<tr><th style='width: 200px; border: 1px solid lightgrey;'>Property</th><th style='width: 200px; border: 1px solid lightgrey;'>Value</th></tr>";
+                        // tableHTML += "<tr><th style='width: 200px; border: 1px solid lightgrey;'>Property</th><th style='width: 200px; border: 1px solid lightgrey;'>Value</th></tr>";
                         tableHTML += "</thead>";
                         tableHTML += "<tbody>";
                         //tableHTML += "<tr><td style='width: 200px; border: 1px solid lightgrey;'>EmployeeCode</td><td style='width: 200px; border: 1px solid lightgrey;'><strong>" + response.employeeCode + "</strong></td></tr>";

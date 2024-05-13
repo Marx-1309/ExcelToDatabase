@@ -132,11 +132,11 @@ namespace ExcelToDatabase.Controllers
 
                                         Pay_VIP pay_VipItem = new Pay_VIP();
 
-                                        if (_context.Pay_VIP.Any(e => e.EmployeeCode == Convert.ToInt32(reader.GetValue(0))))
-                                        {
-                                            ViewBag.Message = "A record with the same ID already exist";
-                                            break;
-                                        }
+                                        //if (_context.Pay_VIP.Any(e => e.EmployeeCode == Convert.ToInt32(reader.GetValue(0))))
+                                        //{
+                                        //    ViewBag.Message = "A record with the same ID already exist";
+                                        //    break;
+                                        //}
 
                                         pay_VipItem.EmployeeCode = Convert.ToInt32(reader.GetValue(0));
                                         pay_VipItem.Surname = reader.GetValue(1)?.ToString();
@@ -191,7 +191,7 @@ namespace ExcelToDatabase.Controllers
                                         pay_VipItem.EDRUNCOSTBP = Convert.ToDecimal(reader.GetValue(50));
                                         pay_VipItem.UploadInstanceId = savedRecord.UploadInstanceID;
 
-                                        _context.Add(pay_VipItem);
+                                        _context.AddAsync(pay_VipItem);
                                          _context.SaveChangesAsync().GetAwaiter().GetResult();
                                         Pay_VIPsList.Add(pay_VipItem);
                                         uploadCount++;
@@ -280,12 +280,12 @@ namespace ExcelToDatabase.Controllers
 
                                 Pay_Deductions pay_DeductionItem = new Pay_Deductions();
 
-                                if (_context.Pay_Deduction.Any(e => e.EmployeeCode == Convert.ToInt32(reader.GetValue(0))))
-                                {
+                                //if (_context.Pay_Deduction.Any(e => e.EmployeeCode == Convert.ToInt32(reader.GetValue(0))))
+                                //{
 
-                                    ViewBag.Message = "A record with the same ID already exists";
-                                    break; // Skip saving this record and move to the next one
-                                }
+                                //    ViewBag.Message = "A record with the same ID already exists";
+                                //    break; // Skip saving this record and move to the next one
+                                //}
 
                                 #region properties populate
                                 pay_DeductionItem.EmployeeCode = Convert.ToInt32(reader.GetValue(0));

@@ -67,6 +67,7 @@ namespace ExcelToDatabase.Controllers
 
                 acc.AccountId = (int)vm.AccountId;
                 acc.PayPointId = (int)vm.PayPointId;
+                acc.PayPointCode = _context.Pay_Paypoint.Where(p => p.PayPointId == vm.PayPointId).Select(r => r.PayPointCode).FirstOrDefault();
                 acc.PayPointName = _context.Pay_Paypoint.Where(p=>p.PayPointId == vm.PayPointId).Select(r=>r.PayPointDescription).FirstOrDefault();
 
                 acc.ACTINDX = (int)vm.ACTINDX;
@@ -181,7 +182,7 @@ namespace ExcelToDatabase.Controllers
                 List<SelectListItem> paypoints = (from paypoint in this._context.Pay_Paypoint
                                                    select new SelectListItem
                                                    {
-                                                       Value = paypoint.PayPointCode,
+                                                       Value = paypoint.PayPointId.ToString(),
                                                        Text = paypoint.PayPointDescription,
                                                    }).ToList();
                 return Json(paypoints);
@@ -265,21 +266,26 @@ namespace ExcelToDatabase.Controllers
                 {
                     var existigRecord = _context.Pay_Accounts.Where(r => r.EarningId == model.EarningId
                     && r.ACTINDX == model.ACTINDX
-                    && r.PayPointId == model.PayPointId).ToListAsync().GetAwaiter().GetResult();
-                    if (existigRecord.Count > 0)
+                    && r.PayPointId == model.PayPointId).FirstOrDefaultAsync().GetAwaiter().GetResult();
+
+                    //if (existigRecord.AccountId == model.AccountId)
+                    //{
+                    //    return Json("You did not make any changes");
+                    //}
+                    if (existigRecord is not null)
                     {
-                        return Json(false, "An account with same configurations exist");
+                        return Json("An account with same configurations exist");
                     }
 
                     _context.Pay_Accounts.Update(model);
                     _context.SaveChangesAsync().GetAwaiter().GetResult();
 
-                return Json("Record update success");
+                return Json("");
  
                 }
                 catch (Exception ex)
                 {
-                    return Json(false,$"Unable to save,error : {ex.InnerException.Message.ToString()}");
+                    return Json($"Unable to save,error : {ex.InnerException.Message.ToString()}");
                 }
         }
 
@@ -307,7 +313,7 @@ namespace ExcelToDatabase.Controllers
                 try
                 {
                     var record = _context.Pay_Accounts
-                    .FirstOrDefaultAsync(m => m.ACTINDX == id);
+                    .FirstOrDefaultAsync(m => m.AccountId == id).GetAwaiter().GetResult();
                     if (record != null)
                     {
                         _context.Remove(record);

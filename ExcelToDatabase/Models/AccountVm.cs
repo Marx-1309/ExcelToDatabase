@@ -5,6 +5,7 @@
         public int AccountId { get; set; }
         public string? AccountName { get; set; }
         public int PayPointId { get; set; }
+        public string? PayPointCode { get; set; }
         public string? PayPointName { get; set; }
         public int EarningId { get; set; }
         public string? EarningName { get; set; }

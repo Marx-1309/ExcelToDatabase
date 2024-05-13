@@ -6,6 +6,7 @@ namespace ExcelToDatabase.Models
     public class Pay_VIP
     {
         [Key]
+        public int Id { get; set; }
         public int EmployeeCode { get; set; }
         public string? Surname { get; set; }
         public string? FullNames { get; set; }
