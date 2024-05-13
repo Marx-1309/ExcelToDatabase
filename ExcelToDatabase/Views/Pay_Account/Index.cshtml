@@ -5,10 +5,10 @@
 }
 
 <p>
-    <button id="btnProcess" type="button" class="btn btn-primary"><img src="~/bsicons/plus-circle.svg" /> Process Account</button>
+    <button id="btnProcess" type="button" class="btn btn-primary"> Process Account</button>
+    @* <br />
     <br />
-    <br />
-    <button type="button" class="btn btn-secondary btn-sm">Export</button>
+    <button type="button" class="btn btn-secondary btn-sm">Export</button> *@
 </p>
 
 <div class="card bg-light mb-3" style="max-width: 100rem;">
@@ -374,12 +374,11 @@
 
             $('.btnDeleteAcc').click(function (event) {
                 event.preventDefault();
-                GetAccountId();
+                //GetAccountId();
 
-                var ACTINDX = $(this).attr('data-actid'); // Retrieve the ACTINDX value from data-actindx attribute
-                alert(ACTINDX);
+                var ACTINDX = $(this).attr('data-actindx'); // Retrieve the ACTINDX value from data-actindx attribute
 
-                DeleteAccDetails(); // Call the function with ACTINDX as argument
+                DeleteAccDetails(ACTINDX); // Call the function with ACTINDX as argument
 
 
             });
@@ -404,38 +403,41 @@
                 formData.PayPointId = $('#edPayPointDropdown option:selected').val();
                 formData.EarningId = $('#edEarningDropdown option:selected').val();
                 //formData.DateCreated = $('#edDatepicker').val();
-                formData.accountId = $(".btnManageAcc").attr('data-actindx');
-                //formData.accountId = GetAccountId();
-
-
+                formData.accountId = $(".btnManageAcc").attr('data-actid');
 
                 $.ajax({
                     url: 'pay_Account/Edit?id=' + ACTINDX,
                     data: formData,
                     type: 'post',
                     success: function (response) {
-                        if (response == null || response == undefined || response.length == 0) {
-                            alert(' to save the data.');
+                        if (response == null || response.length == 0) {
+                            Swal.fire(
+                                'Good job!',
+                                'Record updated successfully',
+                                'success'
+                            );
+
+                            setTimeout(function () {
+                                // document.location.href = 'http://localhost:82/Pay_Account';
+                                location.reload();
+                            }, 1500);
                         } else {
                             $('#modalManageAcc').modal('hide');
                             Swal.fire(
-                                'Good job!',
+                                'Oops...',
                                 response,
-                                'success'
+                                'error'
                             );
-                            setTimeout(function () {
-                                //document.location.href = 'http://localhost:82/Pay_Account';
-                                location.reload();
-                            }, 1500);
+
                         }
                     },
                     error: function () {
 
-                        Swal.fire({
-                            icon: "error",
-                            title: "Oops...",
-                            text: "A record with same configuration seem to exist!",
-                        });
+                        Swal.fire(
+                            'Good job!',
+                             response,
+                            'success'
+                        );
                     }
                 });
             });
@@ -530,42 +532,67 @@
                 });
             }
 
-            function DeleteAccDetails() {
+            function DeleteAccDetails(actid) {
 
-                var actid = element.getAttribute("data-actid");
                 var earningTypeId;
                 var iearning;
-                alert(actid);
-                // AJAX request to fetch account details
-                $.ajax({
-                    url: 'pay_Account/DeleteAccount?id=' + actid,
-                    type: 'GET',
-                    contentType: 'application/json; charset=utf-8',
-                    dataType: 'json',
-                    success: function (response) {
-                        if (response == null || response == undefined || response.length == 0) {
-                            alert('Unable to save the data.');
-                        } else {
-                            earningTypeId = response.earningId;
-                            iearning = response.earning;
 
-                            // Call functions to populate dropdowns
-                            FillAccountGL00100DropDownsType(response.actindx, response.actdescr);
-                            FillPaypointDropDownsType(response.payPointId, response.payPointDescription);
-                            FillAccountEarningDropDownsType(response.earningId, response.earning);
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, delete it!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // AJAX request to fetch account details
+                        $.ajax({
+                            url: 'pay_Account/DeleteAccount?id=' + actid,
+                            type: 'GET',
+                            contentType: 'application/json; charset=utf-8',
+                            dataType: 'json',
+                            success: function (response) {
+                                if (response == null || response.length == 0) {
+                                    Swal.fire({
+                                        title: "Deleted!",
+                                        text: "Your record has been deleted.",
+                                        icon: "success"
+                                    });
+                                    setTimeout(function () {
+                                        // document.location.href = 'http://localhost:82/Pay_Account';
+                                        location.reload();
+                                    }, 1500);
+                                } else {
+                                    earningTypeId = response.earningId;
+                                    iearning = response.earning;
 
-                            // $('#edDatepicker').val(GetDate(response.dateCreated));
-                            // $('#edDatepicker').dateTimePicker();
+                                    // Call functions to populate dropdowns
+                                    FillAccountGL00100DropDownsType(response.actindx, response.actdescr);
+                                    FillPaypointDropDownsType(response.payPointId, response.payPointDescription);
+                                    FillAccountEarningDropDownsType(response.earningId, response.earning);
 
-                            // Display modal
-                            $('#modalManageAcc').modal('show');
+                                    // $('#edDatepicker').val(GetDate(response.dateCreated));
+                                    // $('#edDatepicker').dateTimePicker();
 
-                        }
-                    },
-                    error: function (response) {
-                        alert('getDetailData error');
+                                    // Display modal
+                                    $('#modalManageAcc').modal('show');
+
+                                }
+                            },
+                            error: function (response) {
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Oops...",
+                                    text: "Something went wrong!",
+                                });
+                            }
+                        });
+                        
                     }
                 });
+                
             }
 
             function FillAccountGL00100DropDownsType(glaccountTypeId, iglaccount) {
@@ -690,7 +717,7 @@
                             $(".btnDeleteAcc").attr("data-actid", response);
 
                             //alert('The id is  ' + response);
-
+                            return response;
                         }
                     },
                     error: function () {
