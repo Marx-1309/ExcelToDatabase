@@ -102,7 +102,7 @@ namespace ExcelToDatabase.Controllers
                             using (var reader = ExcelReaderFactory.CreateReader(stream))
                             {
                                 List<Pay_VIP> Pay_VIPsList = new List<Pay_VIP>();
-
+                                int defaultPaypoint = 10;
                                 do
                                 {
                                     bool isHeaderSkipped = false;
@@ -140,55 +140,66 @@ namespace ExcelToDatabase.Controllers
 
                                         pay_VipItem.EmployeeCode = Convert.ToInt32(reader.GetValue(0));
                                         pay_VipItem.Surname = reader.GetValue(1)?.ToString();
-                                        pay_VipItem.FullNames = reader.GetValue(2)?.ToString();
-                                        pay_VipItem.PayPoint = Convert.ToInt32(reader.GetValue(3));
-                                        pay_VipItem.EDSALARY = Convert.ToDecimal(reader.GetValue(4));
-                                        pay_VipItem.EDANNUALBONUS = Convert.ToDecimal(reader.GetValue(5));
-                                        pay_VipItem.EDSUBSIDYNON_TAX = Convert.ToDecimal(reader.GetValue(6));
-                                        pay_VipItem.EDSUBSIDYTAXABLE = Convert.ToDecimal(reader.GetValue(7));
-                                        pay_VipItem.EDCARALLTAXABLE = Convert.ToDecimal(reader.GetValue(8));
-                                        pay_VipItem.EDCARALLNONTAX = Convert.ToDecimal(reader.GetValue(9));
-                                        pay_VipItem.EDOVERTIME1_5 = Convert.ToDecimal(reader.GetValue(10));
-                                        pay_VipItem.EDOVERTIME2_0 = Convert.ToDecimal(reader.GetValue(11));
-                                        pay_VipItem.EDLEAVEPAIDOUT = Convert.ToDecimal(reader.GetValue(12));
-                                        pay_VipItem.EDUNPAIDLEAVE = Convert.ToDecimal(reader.GetValue(13));
-                                        pay_VipItem.EDBACKPAYSALARY = Convert.ToDecimal(reader.GetValue(14));
-                                        pay_VipItem.EDACTINGALL = Convert.ToDecimal(reader.GetValue(15));
-                                        pay_VipItem.EDTELEPHONEALL = Convert.ToDecimal(reader.GetValue(16));
-                                        pay_VipItem.EDFURNITUREALL = Convert.ToDecimal(reader.GetValue(17));
-                                        pay_VipItem.EDWATER_ELEC = Convert.ToDecimal(reader.GetValue(18));
-                                        pay_VipItem.EDTRAVELALL = Convert.ToDecimal(reader.GetValue(19));
-                                        pay_VipItem.EDHOUSING = Convert.ToDecimal(reader.GetValue(20));
-                                        pay_VipItem.EDREFUNDS = Convert.ToDecimal(reader.GetValue(21));
-                                        pay_VipItem.EDCARRUNNINGCOS = Convert.ToDecimal(reader.GetValue(22));
-                                        pay_VipItem.EDRENTALALLOWANC = Convert.ToDecimal(reader.GetValue(23));
-                                        pay_VipItem.EDTRANSPORTALLOW = Convert.ToDecimal(reader.GetValue(24));
-                                        pay_VipItem.EDCASHBONUS = Convert.ToDecimal(reader.GetValue(25));
-                                        pay_VipItem.EDS_TCLAIM = Convert.ToDecimal(reader.GetValue(26));
-                                        pay_VipItem.EDSEPARATIONGRAT = Convert.ToDecimal(reader.GetValue(27));
-                                        pay_VipItem.EDREMOTENESSALLO = Convert.ToDecimal(reader.GetValue(28));
-                                        pay_VipItem.EDREMOTENESSALL = Convert.ToDecimal(reader.GetValue(29));
-                                        pay_VipItem.EDCASHBONUS = Convert.ToDecimal(reader.GetValue(30));
-                                        pay_VipItem.EDALLOBACKPAY = Convert.ToDecimal(reader.GetValue(31));
-                                        pay_VipItem.EDBACKPAYNONTAX = Convert.ToDecimal(reader.GetValue(32));
-                                        pay_VipItem.EDBACKPAYTAXABLE = Convert.ToDecimal(reader.GetValue(33));
-                                        pay_VipItem.EDBACKPAYBONUS = Convert.ToDecimal(reader.GetValue(34));
-                                        pay_VipItem.EDFIXEDOVERTIME = Convert.ToDecimal(reader.GetValue(35));
-                                        pay_VipItem.EDT_SHIRTREFUND = Convert.ToDecimal(reader.GetValue(36));
-                                        pay_VipItem.EDOVERTIMBACKPAY = Convert.ToDecimal(reader.GetValue(37));
-                                        pay_VipItem.EDHOUSALLBACKPAY = Convert.ToDecimal(reader.GetValue(38));
-                                        pay_VipItem.EDTRANSBACKPAY = Convert.ToDecimal(reader.GetValue(39));
-                                        pay_VipItem.EDACTINGBACKPAY = Convert.ToDecimal(reader.GetValue(40));
-                                        pay_VipItem.EDCASHBBACKPAY = Convert.ToDecimal(reader.GetValue(41));
-                                        pay_VipItem.EDREMOTENESSBP = Convert.ToDecimal(reader.GetValue(42));
-                                        pay_VipItem.EDBACKPAYSUBSIDY = Convert.ToDecimal(reader.GetValue(43));
-                                        pay_VipItem.EDHOUSINGNONTAX = Convert.ToDecimal(reader.GetValue(44));
-                                        pay_VipItem.EDHOUSINGTAXABLE = Convert.ToDecimal(reader.GetValue(45));
-                                        pay_VipItem.EDBPMANNONTAX = Convert.ToDecimal(reader.GetValue(46));
-                                        pay_VipItem.EDBPMANTAXABLE = Convert.ToDecimal(reader.GetValue(47));
-                                        pay_VipItem.EDCARALLBPTAX = Convert.ToDecimal(reader.GetValue(48));
-                                        pay_VipItem.EDCARALLBPN_TAX = Convert.ToDecimal(reader.GetValue(49));
-                                        pay_VipItem.EDRUNCOSTBP = Convert.ToDecimal(reader.GetValue(50));
+                                        pay_VipItem.FullNames = reader?.GetValue(2)?.ToString();
+                                        object value = reader?.GetValue(3);
+
+                                        if (value != null && int.TryParse(value.ToString(), out int intValue))
+                                        {
+                                            pay_VipItem.PayPoint = intValue;
+                                        }
+                                        else
+                                        {
+                                            // Handle the case where the value cannot be converted to an integer
+                                            // Assign a default value or handle the error as appropriate
+                                            pay_VipItem.PayPoint = 100; // Default value
+                                        }
+                                        pay_VipItem.EDSALARY = Convert.ToDecimal(reader?.GetValue(4));
+                                        pay_VipItem.EDANNUALBONUS = Convert.ToDecimal(reader?.GetValue(5));
+                                        pay_VipItem.EDSUBSIDYNON_TAX = Convert.ToDecimal(reader?.GetValue(6));
+                                        pay_VipItem.EDSUBSIDYTAXABLE = Convert.ToDecimal(reader?.GetValue(7));
+                                        pay_VipItem.EDCARALLTAXABLE = Convert.ToDecimal(reader?.GetValue(8));
+                                        pay_VipItem.EDCARALLNONTAX = Convert.ToDecimal(reader?.GetValue(9));
+                                        pay_VipItem.EDOVERTIME1_5 = Convert.ToDecimal(reader?.GetValue(10));
+                                        pay_VipItem.EDOVERTIME2_0 = Convert.ToDecimal(reader?.GetValue(11));
+                                        pay_VipItem.EDLEAVEPAIDOUT = Convert.ToDecimal(reader?.GetValue(12));
+                                        pay_VipItem.EDUNPAIDLEAVE = Convert.ToDecimal(reader?.GetValue(13));
+                                        pay_VipItem.EDBACKPAYSALARY = Convert.ToDecimal(reader?.GetValue(14));
+                                        pay_VipItem.EDACTINGALL = Convert.ToDecimal(reader?.GetValue(15));
+                                        pay_VipItem.EDTELEPHONEALL = Convert.ToDecimal(reader?.GetValue(16));
+                                        pay_VipItem.EDFURNITUREALL = Convert.ToDecimal(reader?.GetValue(17));
+                                        pay_VipItem.EDWATER_ELEC = Convert.ToDecimal(reader?.GetValue(18));
+                                        pay_VipItem.EDTRAVELALL = Convert.ToDecimal(reader?.GetValue(19));
+                                        pay_VipItem.EDHOUSING = Convert.ToDecimal(reader?.GetValue(20));
+                                        pay_VipItem.EDREFUNDS = Convert.ToDecimal(reader?.GetValue(21));
+                                        pay_VipItem.EDCARRUNNINGCOS = Convert.ToDecimal(reader?.GetValue(22));
+                                        pay_VipItem.EDRENTALALLOWANC = Convert.ToDecimal(reader?.GetValue(23));
+                                        pay_VipItem.EDTRANSPORTALLOW = Convert.ToDecimal(reader?.GetValue(24));
+                                        pay_VipItem.EDCASHBONUS = Convert.ToDecimal(reader?.GetValue(25));
+                                        pay_VipItem.EDS_TCLAIM = Convert.ToDecimal(reader?.GetValue(26));
+                                        pay_VipItem.EDSEPARATIONGRAT = Convert.ToDecimal(reader?.GetValue(27));
+                                        pay_VipItem.EDREMOTENESSALLO = Convert.ToDecimal(reader?.GetValue(28));
+                                        pay_VipItem.EDREMOTENESSALL = Convert.ToDecimal(reader?.GetValue(29));
+                                        pay_VipItem.EDCASHBONUS = Convert.ToDecimal(reader?.GetValue(30));
+                                        pay_VipItem.EDALLOBACKPAY = Convert.ToDecimal(reader?.GetValue(31));
+                                        pay_VipItem.EDBACKPAYNONTAX = Convert.ToDecimal(reader?.GetValue(32));
+                                        pay_VipItem.EDBACKPAYTAXABLE = Convert.ToDecimal(reader?.GetValue(33));
+                                        pay_VipItem.EDBACKPAYBONUS = Convert.ToDecimal(reader?.GetValue(34));
+                                        pay_VipItem.EDFIXEDOVERTIME = Convert.ToDecimal(reader?.GetValue(35));
+                                        pay_VipItem.EDT_SHIRTREFUND = Convert.ToDecimal(reader?.GetValue(36));
+                                        pay_VipItem.EDOVERTIMBACKPAY = Convert.ToDecimal(reader?.GetValue(37));
+                                        pay_VipItem.EDHOUSALLBACKPAY = Convert.ToDecimal(reader?.GetValue(38));
+                                        pay_VipItem.EDTRANSBACKPAY = Convert.ToDecimal(reader?.GetValue(39));
+                                        pay_VipItem.EDACTINGBACKPAY = Convert.ToDecimal(reader?.GetValue(40));
+                                        pay_VipItem.EDCASHBBACKPAY = Convert.ToDecimal(reader?.GetValue(41));
+                                        pay_VipItem.EDREMOTENESSBP = Convert.ToDecimal(reader?.GetValue(42));
+                                        pay_VipItem.EDBACKPAYSUBSIDY = Convert.ToDecimal(reader?.GetValue(43));
+                                        pay_VipItem.EDHOUSINGNONTAX = Convert.ToDecimal(reader?.GetValue(44));
+                                        pay_VipItem.EDHOUSINGTAXABLE = Convert.ToDecimal(reader?.GetValue(45));
+                                        pay_VipItem.EDBPMANNONTAX = Convert.ToDecimal(reader?.GetValue(46));
+                                        pay_VipItem.EDBPMANTAXABLE = Convert.ToDecimal(reader?.GetValue(47));
+                                        pay_VipItem.EDCARALLBPTAX = Convert.ToDecimal(reader?.GetValue(48));
+                                        pay_VipItem.EDCARALLBPN_TAX = Convert.ToDecimal(reader?.GetValue(49));
+                                        pay_VipItem.EDRUNCOSTBP = Convert.ToDecimal(reader?.GetValue(50));
                                         pay_VipItem.UploadInstanceId = savedRecord.UploadInstanceID;
 
                                         _context.AddAsync(pay_VipItem);
@@ -216,100 +227,127 @@ namespace ExcelToDatabase.Controllers
 
         public JsonResult UploadDeductionsDoc(IFormFile FileUpload2, Pay_UploadInstance savedRecord)
         {
-            if (FileUpload2 != null)
+            try
             {
-                var fileName = FileUpload2.FileName; // Assuming file.FileName is a string
-                var fileExtension = Path.GetExtension(fileName);
-                var xlsExt = ".xls";
-                var xlsxExt = ".xlsx";
-                var uploadCount = 0;
-
-                if (fileExtension != xlsExt && fileExtension != xlsxExt)
+                if (FileUpload2 != null)
                 {
-                    ViewBag["error"] = "Please upload file with the correct extension ex. xlsx or xls!";
-                    return Json("Please upload file with the correct extension ex.xlsx or xls!");
-                }
-
-                var uploadsFolder = $"{Directory.GetCurrentDirectory()}\\wwwroot\\Uploads\\Deduction_Docs\\";
-
-                if (!Directory.Exists(uploadsFolder))
-                {
-                    Directory.CreateDirectory(uploadsFolder);
-                }
-
-                var filePath = Path.Combine(uploadsFolder, FileUpload2.FileName);
-
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    FileUpload2.CopyToAsync(stream).GetAwaiter().GetResult();
-                }
-
-                {
-                    using (var stream = System.IO.File.Open(filePath, FileMode.Open, FileAccess.Read))
-                    using (var reader = ExcelReaderFactory.CreateReader(stream))
+                    try
                     {
-                        List<Pay_Deductions> Pay_DeductionsList = new List<Pay_Deductions>();
+                        var fileName = FileUpload2.FileName; // Assuming file.FileName is a string
+                        var fileExtension = Path.GetExtension(fileName);
+                        var xlsExt = ".xls";
+                        var xlsxExt = ".xlsx";
+                        var uploadCount = 0;
 
-                        do
+                        if (fileExtension != xlsExt && fileExtension != xlsxExt)
                         {
-
-                            bool isMyHeaderSkipped = false;
-
-                            //Incase you want to keep excel deductions data for one instance at a time 
-                            //var items = _context.Pay_Deduction.Where(c => c.EmployeeCode > 0).ToListAsync().GetAwaiter().GetResult();
-                            //if (items.Any())
-                            //{
-                            //    _context.RemoveRange(items);
-                            //    _context.SaveChangesAsync().GetAwaiter().GetResult();
-                            //}
-
-                            while (reader.Read())
-                            {
-                                if (!isMyHeaderSkipped)
-                                {
-                                    isMyHeaderSkipped = true;
-                                    continue;
-                                }
-                                if (Convert.ToInt32(reader.GetValue(0)) == 0 && uploadCount > 0)
-                                {
-                                    TempData["success"] = "Success Upload";
-                                    //await Upload(FileUpload2, savedRecord);
-                                    return Json("Successfully uploaded file1");
-
-                                }
-
-                                Pay_Deductions pay_DeductionItem = new Pay_Deductions();
-
-                                //if (_context.Pay_Deduction.Any(e => e.EmployeeCode == Convert.ToInt32(reader.GetValue(0))))
-                                //{
-
-                                //    ViewBag.Message = "A record with the same ID already exists";
-                                //    break; // Skip saving this record and move to the next one
-                                //}
-
-                                #region properties populate
-                                pay_DeductionItem.EmployeeCode = Convert.ToInt32(reader.GetValue(0));
-                                pay_DeductionItem.Surname = reader.GetValue(1)?.ToString();
-                                pay_DeductionItem.FullNames = reader.GetValue(2)?.ToString();
-                                pay_DeductionItem.PayPoint = Convert.ToInt32(reader.GetValue(3));
-                                pay_DeductionItem.DdSocialSecurity = Convert.ToDecimal(reader.GetValue(4));
-                                pay_DeductionItem.DdPension = Convert.ToDecimal(reader.GetValue(5));
-                                pay_DeductionItem.CcSocialSecurity = Convert.ToDecimal(reader.GetValue(6));
-                                pay_DeductionItem.CcPension = Convert.ToDecimal(reader.GetValue(7));
-                                pay_DeductionItem.UploadInstanceId = savedRecord.UploadInstanceID;
-                                #endregion
-
-                                _context.Add(pay_DeductionItem);
-                                _context.SaveChangesAsync().GetAwaiter().GetResult();
-                                Pay_DeductionsList.Add(pay_DeductionItem);
-                                uploadCount++;
-                            }
-                            // Break after the loop if the condition was met at least once
+                            ViewBag["error"] = "Please upload file with the correct extension ex. xlsx or xls!";
+                            return Json("Please upload file with the correct extension ex.xlsx or xls!");
                         }
-                        while (reader.NextResult());
+
+                        var uploadsFolder = $"{Directory.GetCurrentDirectory()}\\wwwroot\\Uploads\\Deduction_Docs\\";
+
+                        if (!Directory.Exists(uploadsFolder))
+                        {
+                            Directory.CreateDirectory(uploadsFolder);
+                        }
+
+                        var filePath = Path.Combine(uploadsFolder, FileUpload2.FileName);
+
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            FileUpload2.CopyToAsync(stream).GetAwaiter().GetResult();
+                        }
+
+                        {
+                            using (var stream = System.IO.File.Open(filePath, FileMode.Open, FileAccess.Read))
+                            using (var reader = ExcelReaderFactory.CreateReader(stream))
+                            {
+                                List<Pay_Deductions> Pay_DeductionsList = new List<Pay_Deductions>();
+
+                                do
+                                {
+
+                                    bool isMyHeaderSkipped = false;
+
+                                    //Incase you want to keep excel deductions data for one instance at a time 
+                                    //var items = _context.Pay_Deduction.Where(c => c.EmployeeCode > 0).ToListAsync().GetAwaiter().GetResult();
+                                    //if (items.Any())
+                                    //{
+                                    //    _context.RemoveRange(items);
+                                    //    _context.SaveChangesAsync().GetAwaiter().GetResult();
+                                    //}
+
+                                    while (reader.Read())
+                                    {
+                                        if (!isMyHeaderSkipped)
+                                        {
+                                            isMyHeaderSkipped = true;
+                                            continue;
+                                        }
+                                        if (Convert.ToInt32(reader.GetValue(0)) == 0 && uploadCount > 0)
+                                        {
+                                            TempData["success"] = "Success Upload";
+                                            //await Upload(FileUpload2, savedRecord);
+                                            return Json("Successfully uploaded file1");
+
+                                        }
+
+                                        Pay_Deductions pay_DeductionItem = new Pay_Deductions();
+
+                                        //if (_context.Pay_Deduction.Any(e => e.EmployeeCode == Convert.ToInt32(reader.GetValue(0))))
+                                        //{
+
+                                        //    ViewBag.Message = "A record with the same ID already exists";
+                                        //    break; // Skip saving this record and move to the next one
+                                        //}
+
+                                        #region properties populate
+                                        pay_DeductionItem.EmployeeCode = Convert.ToInt32(reader.GetValue(0));
+                                        pay_DeductionItem.Surname = reader.GetValue(1)?.ToString();
+                                        pay_DeductionItem.FullNames = reader.GetValue(2)?.ToString();
+                                        object value = reader?.GetValue(3);
+
+                                        if (value != null && int.TryParse(value.ToString(), out int intValue))
+                                        {
+                                            pay_DeductionItem.PayPoint = intValue;
+                                        }
+                                        else
+                                        {
+                                            // Handle the case where the value cannot be converted to an integer
+                                            // Assign a default value or handle the error as appropriate
+                                            pay_DeductionItem.PayPoint = 100; // Default value
+                                        }
+                                        pay_DeductionItem.DdSocialSecurity = Convert.ToDecimal(reader.GetValue(5));
+                                        pay_DeductionItem.DdPension = Convert.ToDecimal(reader.GetValue(6));
+                                        pay_DeductionItem.CcSocialSecurity = Convert.ToDecimal(reader.GetValue(7));
+                                        pay_DeductionItem.CcPension = Convert.ToDecimal(reader.GetValue(8));
+                                        pay_DeductionItem.UploadInstanceId = savedRecord.UploadInstanceID;
+                                        #endregion
+
+                                        _context.Add(pay_DeductionItem);
+                                        _context.SaveChangesAsync().GetAwaiter().GetResult();
+                                        Pay_DeductionsList.Add(pay_DeductionItem);
+                                        uploadCount++;
+                                    }
+                                    // Break after the loop if the condition was met at least once
+                                }
+                                while (reader.NextResult());
+                            }
+                        }
+                    }
+                    catch(Exception ex)
+                    {
+
                     }
                 }
+                    
             }
+            catch(Exception ex)
+            {
+
+            }
+            
             return Json("File2 upload success");
         }
 
@@ -501,7 +539,7 @@ namespace ExcelToDatabase.Controllers
         [HttpGet]
         public JsonResult DeleteInstance(int? id)
         {
-            if (id == null || _context.Pay_UploadInstance == null)
+            if (id == null || _context.Pay_UploadInstance.ToList() == null)
             {
                 return Json(""); 
             }

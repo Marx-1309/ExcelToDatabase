@@ -10,9 +10,7 @@ namespace ExcelToDatabase.Models
             public int EmployeeCode { get; set; }
             public string Surname { get; set; }
             public string FullNames { get; set; }
-            public string JobTitle { get; set; }
             public int PayPoint { get; set; }
-            public decimal EdSalary { get; set; }
             public decimal DdSocialSecurity { get; set; }
             public decimal DdPension { get; set; }
             public decimal CcSocialSecurity { get; set; }
