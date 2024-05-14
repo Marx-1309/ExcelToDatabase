@@ -52,9 +52,9 @@ namespace ExcelToDatabase.Controllers
             var payPoint  = await _context.Pay_Paypoint.ToListAsync();
             var earnings = await _context.Pay_Earning.ToListAsync();
 
-            ViewBag.AllGLAccountsDd = allGlAccounts;
-            ViewBag.AllPayPointsDd = payPoint;
-            ViewBag.AllEarningsDd = earnings;
+            ViewBag.AllGLAccountsDd = allGlAccounts.OrderBy(r=>r.ACTDESCR);
+            ViewBag.AllPayPointsDd = payPoint.OrderBy(r => r.PayPointDescription);
+            ViewBag.AllEarningsDd = earnings.OrderBy(r => r.Earning);
 
             var accountsvm = await _context.Pay_Accounts.ToListAsync();
 
@@ -143,77 +143,41 @@ namespace ExcelToDatabase.Controllers
         {
             if (id == 1)
             {
-                #region oldCode
-                //List<GL00100> glAccounts = _context.GL00100.Where(r=>r.ACCATNUM==10).ToList();
-
-                //if (glAccounts == null || !glAccounts.Any())
-                //{
-                //    return Json(false, $"GL00100 Account has no records");
-                //}
-
-                //foreach (var account in glAccounts)
-                //{
-                //    account.ACTDESCR = account.ACTDESCR?.Trim();
-                //}
-                #endregion
-                List<SelectListItem> glAccounts = (from account in this._context.GL00100.Where(r=>r.ACCATNUM ==10)
+                List<SelectListItem> glAccounts = (from account in this._context.GL00100
+                                                   where account.ACCATNUM == 10
+                                                   orderby account.ACTDESCR
                                                    select new SelectListItem
-                                                    {
-                                                        Value = account.ACTINDX.ToString(),
-                                                        Text = account.ACTDESCR,
-                                                    }).ToList();
+                                                   {
+                                                       Value = account.ACTINDX.ToString(),
+                                                       Text = account.ACTDESCR,
+                                                   }).ToList();
                 return Json(glAccounts);
             }
             if (id == 2)
             {
-                #region oldCode
-                //List<Pay_Paypoint> paypoints = _context.Pay_Paypoint.ToList();
-
-                //if (paypoints == null || !paypoints.Any())
-                //{
-                //    return Json(false, $"Pay_Paypoint has no records");
-                //}
-
-                //foreach (var paypoint in paypoints)
-                //{
-                //    paypoint.PayPointCode = paypoint.PayPointCode?.Trim();
-                //}
-                #endregion
                 List<SelectListItem> paypoints = (from paypoint in this._context.Pay_Paypoint
-                                                   select new SelectListItem
-                                                   {
-                                                       Value = paypoint.PayPointId.ToString(),
-                                                       Text = paypoint.PayPointDescription,
-                                                   }).ToList();
+                                                  orderby paypoint.PayPointDescription
+                                                  select new SelectListItem
+                                                  {
+                                                      Value = paypoint.PayPointId.ToString(),
+                                                      Text = paypoint.PayPointDescription,
+                                                  }).ToList();
                 return Json(paypoints);
             }
             if (id == 3)
             {
-                #region oldCode
-                //List<Pay_Earning> earnings = _context.Pay_Earning.ToList();
-
-                //if (earnings == null || !earnings.Any())
-                //{
-                //    return Json(false, $"Pay_Earning has no records");
-                //}
-
-                //foreach (var earning in earnings)
-                //{
-                //    earning.Earning = earning.Earning;
-                //}
-                #endregion
                 List<SelectListItem> earnings = (from earning in this._context.Pay_Earning
-                                                  select new SelectListItem
-                                                  {
-                                                      Value = earning.EarningId.ToString(),
-                                                      Text = earning.Earning,
-                                                  }).ToList();
-
+                                                 orderby earning.Earning
+                                                 select new SelectListItem
+                                                 {
+                                                     Value = earning.EarningId.ToString(),
+                                                     Text = earning.Earning,
+                                                 }).ToList();
                 return Json(earnings);
             }
             return Json("Something went wrong while retrieving data from the server ");
-
         }
+
 
 
         // GET: Pay_Account/Create

@@ -23,7 +23,7 @@ namespace ExcelToDatabase.Controllers
             var months = await _context.Pay_Month.ToListAsync();
             var i = await _context.Pay_UploadInstance.Include(m => m.Month).ToListAsync();
 
-            var ii = await _context.Pay_UploadInstance.Include(m => m.Month).ToListAsync();
+            var ii = await _context.Pay_UploadInstance.Include(m => m.Month).OrderBy(r=>r.MonthId).ToListAsync();
             var instanceMonthVm = new InstanceMonthVm
             {
                 uploadInstances = ii,
