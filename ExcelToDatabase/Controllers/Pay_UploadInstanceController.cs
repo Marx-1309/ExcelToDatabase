@@ -318,10 +318,10 @@ namespace ExcelToDatabase.Controllers
                                             // Assign a default value or handle the error as appropriate
                                             pay_DeductionItem.PayPoint = 100; // Default value
                                         }
-                                        pay_DeductionItem.DdSocialSecurity = Convert.ToDecimal(reader.GetValue(5));
-                                        pay_DeductionItem.DdPension = Convert.ToDecimal(reader.GetValue(6));
-                                        pay_DeductionItem.CcSocialSecurity = Convert.ToDecimal(reader.GetValue(7));
-                                        pay_DeductionItem.CcPension = Convert.ToDecimal(reader.GetValue(8));
+                                        pay_DeductionItem.DdSocialSecurity = Convert.ToDecimal(reader.GetValue(4));
+                                        pay_DeductionItem.DdPension = Convert.ToDecimal(reader.GetValue(5));
+                                        pay_DeductionItem.CcSocialSecurity = Convert.ToDecimal(reader.GetValue(6));
+                                        pay_DeductionItem.CcPension = Convert.ToDecimal(reader.GetValue(7));
                                         pay_DeductionItem.UploadInstanceId = savedRecord.UploadInstanceID;
                                         #endregion
 

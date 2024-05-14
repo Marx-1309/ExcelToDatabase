@@ -7,7 +7,7 @@
 
 
 <div class="card bg-light mb-3" style="max-width: 100rem;">
-    <div class="card-header"><b>Instances</b></div>
+    <div class="card-header"><b>Individual Earnings</b></div>
     <div class="card-body">
         <div class="accordion" id="accordionExample" style="padding-bottom:10px;">
             <div class="accordion-item">
@@ -52,9 +52,16 @@
             <td>
                 @Html.DisplayFor(modelItem => item.FullNames)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PayPoint)
-            </td>
+                        <td>
+                            @if (item.PayPoint == 100)
+                            {
+                                <a><span class="badge bg-danger">N/A</span></a>
+                            }
+                            else
+                            {
+                                @Html.DisplayFor(modelItem => item.PayPoint)
+                            }
+                        </td>
             <td>
                 @Html.DisplayFor(modelItem => item.EDSALARY, "{0:c}")
             </td>

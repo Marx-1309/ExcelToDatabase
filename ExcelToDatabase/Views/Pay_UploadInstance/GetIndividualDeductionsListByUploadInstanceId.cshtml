@@ -79,9 +79,16 @@
             <td>
                 @Html.DisplayFor(modelItem => item.FullNames)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PayPoint)
-            </td>
+                        <td>
+                            @if (item.PayPoint == 100)
+                            {
+                                <a><span class="badge bg-danger">N/A</span></a>
+                            }
+                            else
+                            {
+                                @Html.DisplayFor(modelItem => item.PayPoint)
+                            }
+                        </td>
             <td>
                 @Html.DisplayFor(modelItem => item.DdSocialSecurity)
             </td>
