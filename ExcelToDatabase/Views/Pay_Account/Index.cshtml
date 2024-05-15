@@ -210,11 +210,17 @@
                 $('#tblAccounts').DataTable();
             }, 2500);
 
+            $('#earningDropdown').change(function () {
+                AddRefreshDropDown();
+                ValidateAddForm();
+            })
+
             $('#accountDropdown').change(function () {
                 ValidateAddForm();
             })
 
             $('#paypointDropdown').change(function () {
+
                 ValidateAddForm();
             })
 
@@ -710,6 +716,31 @@
                     type: 'get',
                     success: function (response) {
                         if (response == null ) {
+                            alert('Unable to fetch the account id.');
+                        } else {
+
+                            $(".btnManageAcc").attr("data-actid", response);
+                            $(".btnDeleteAcc").attr("data-actid", response);
+
+                            //alert('The id is  ' + response);
+                            return response;
+                        }
+                    },
+                    error: function () {
+
+                        alert('Unable to fetch the account id.');
+                    }
+                });
+            }
+
+            function AddRefreshDropDown() {
+                //formData.DateCreated = $('#edDatepicker').val();
+
+                $.ajax({
+                    url: 'pay_Account/RefreshAccountsConfigDropDown',
+                    type: 'get',
+                    success: function (response) {
+                        if (response == null) {
                             alert('Unable to fetch the account id.');
                         } else {
 

@@ -161,6 +161,51 @@
                 GetEmployeeDeductions(empId); // Call the function with ACTINDX as argument
             });
 
+            // $('.edSaveChanges').click(function () {
+            //     var formData = new FormData();
+
+
+            //     formData.append("Id", $('#idInput').val());
+            //     formData.append("EmployeeCode", $('#employeeCodeInput').val());
+            //     formData.append("Surname", $('#surnameInput').val());
+            //     formData.append("FullNames", $('#fullNamesInput').val());
+            //     formData.append("PayPoint", $('#payPointInput').val());
+            //     formData.append("DdSocialSecurity", $('#ddSocialSecurityInput').val());
+            //     formData.append("DdPension", $('#ddPensionInput').val());
+            //     formData.append("CcSocialSecurity", $('#ccSocialSecurityInput').val());
+            //     formData.append("CcPension", $('#ccPensionInput').val());
+
+            //     $.ajax({
+            //         url: '/pay_UploadInstance/UpdateEmployeeDeductionsData',
+            //         type: 'POST',
+            //         data: formData,
+            //         processData: false,  // Prevent jQuery from automatically processing formData
+            //         contentType: false,  // Prevent jQuery from setting contentType
+            //         success: function (response) {
+            //             if (response == null || response == undefined || response.length == 0) {
+            //                 alert('Unable to save the data.');
+            //             } else {
+            //                 HidelModal();
+            //                 Swal.fire(
+            //                     'Good job!',
+            //                     'Record saved successfully!',
+            //                     'success'
+            //                 );
+            //                 setTimeout(function () {
+            //                     //document.location.href = 'http://localhost:82/Pay_UploadInstance';
+            //                     location.reload();
+            //                 }, 1500);
+            //             }
+            //         },
+            //         error: function () {
+
+            //             alert('Unable to save the data.');
+            //         }
+            //     });
+
+
+            // });
+
             function GetEmployeeDeductions(empId) {
                     $.ajax({
                         url: '/pay_UploadInstance/GetEmployeeDeductionsByCode?Id=' + empId,

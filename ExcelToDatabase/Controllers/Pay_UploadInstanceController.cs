@@ -597,6 +597,24 @@ namespace ExcelToDatabase.Controllers
             return Json("");
         }
 
+        //[HttpPost]
+        //public JsonResult UpdateEmployeeDeductionsData(Pay_Deductions deductions)
+        //{
+        //    if(deductions is not null)
+        //    {
+        //        try
+        //        {
+
+        //        }
+        //        catch(Exception ex)
+        //        {
+
+        //        }
+                
+        //    }
+        //    return Json(true);
+        //}
+
         //// POST: Pay_InstancePayroll/Delete/5
         //[HttpPost, ActionName("Delete")]
         //[ValidateAntiForgeryToken]

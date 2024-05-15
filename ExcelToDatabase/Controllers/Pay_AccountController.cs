@@ -316,5 +316,19 @@ namespace ExcelToDatabase.Controllers
         {
           return (_context.Pay_Accounts?.Any(e => e.ACTINDX == id)).GetValueOrDefault();
         }
+
+        public JsonResult RefreshAccountsConfigDropDown(AccountVm vm)
+        {
+                try
+                {
+                    var earningsListDd = _context.Pay_Accounts.Select(s=>s.EarningId).ToList();
+
+                }
+                catch(Exception ex)
+                {
+
+                }
+            return Json(true);
+        }
     }
 }
