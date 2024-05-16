@@ -318,22 +318,49 @@ namespace ExcelToDatabase.Controllers
           return (_context.Pay_Accounts?.Any(e => e.ACTINDX == id)).GetValueOrDefault();
         }
 
-        //public JsonResult RefreshAccountsConfigDropDown(AccountVm vm)
-        //{
-        //        try
-        //        {
-        //            var linkedEarnings = _context.Pay_Accounts.Select(s=>s.EarningId).ToList();
-        //            var linkedPayPoints = _context.Pay_Accounts.Select(s => s.PayPointId).ToList();
-        //            var linkedAccounts = _context.Pay_Accounts.Select(s => s.ACTINDX).ToList();
+        public JsonResult RefreshAccountsConfigDropDown(AccountVm vm)
+        {
+            try
+            {
 
-        //        if(vm.PayEarnings == linkedEarnings  )
+                if (vm.ACTINDX > 0 && vm.EarningId > 0)
+                {
+                    //Find an account with these matching ACTINDX,EarningId,PayPointId
+                    //Then remove the PayPoint of the account with the matching ACTINDX & EarningId from the dropdownlist
+                    var allLinkedAccountsEarningId = _context.Pay_Accounts.AsNoTracking()
+                                    .Where(r => r.ACTINDX == vm.ACTINDX && r.EarningId == vm.EarningId)
+                                    .Select(r => r.PayPointId)
+                                    .ToList();
 
-        //    }
-        //        catch(Exception ex)
-        //        {
+                    var payPoints = _context.Pay_Paypoint.Where(r => !allLinkedAccountsEarningId.Contains(r.PayPointId))
+                                                       .Select(r => r.PayPointId)
+                                                       .ToList();
+                    //populate pay points dropdown with these pay points 
 
-        //        }
-        //    return Json(true);
-        //}
+                    // Code block
+                }
+
+                if (vm.EarningId > 0 && vm.PayPointId > 0)
+                {
+                    // Code block
+                }
+
+                if (vm.PayPointId > 0 && vm.ACTINDX < 0)
+                {
+                    // Code block
+                }
+
+
+                var accounts = _context.Pay_Accounts.ToList();
+
+                var records = accounts.Where(r => r.ACTINDX == vm.ACTINDX).ToList();
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return Json(true);
+        }
     }
 }
