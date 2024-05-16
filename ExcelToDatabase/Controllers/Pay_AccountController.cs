@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using ExcelToDatabase.Models;
 using System.Text.Json;
 using BenchmarkDotNet.Running;
+using BenchmarkDotNet.Filters;
 
 
 namespace ExcelToDatabase.Controllers
@@ -317,18 +318,22 @@ namespace ExcelToDatabase.Controllers
           return (_context.Pay_Accounts?.Any(e => e.ACTINDX == id)).GetValueOrDefault();
         }
 
-        public JsonResult RefreshAccountsConfigDropDown(AccountVm vm)
-        {
-                try
-                {
-                    var earningsListDd = _context.Pay_Accounts.Select(s=>s.EarningId).ToList();
+        //public JsonResult RefreshAccountsConfigDropDown(AccountVm vm)
+        //{
+        //        try
+        //        {
+        //            var linkedEarnings = _context.Pay_Accounts.Select(s=>s.EarningId).ToList();
+        //            var linkedPayPoints = _context.Pay_Accounts.Select(s => s.PayPointId).ToList();
+        //            var linkedAccounts = _context.Pay_Accounts.Select(s => s.ACTINDX).ToList();
 
-                }
-                catch(Exception ex)
-                {
+        //        if(vm.PayEarnings == linkedEarnings  )
 
-                }
-            return Json(true);
-        }
+        //    }
+        //        catch(Exception ex)
+        //        {
+
+        //        }
+        //    return Json(true);
+        //}
     }
 }
