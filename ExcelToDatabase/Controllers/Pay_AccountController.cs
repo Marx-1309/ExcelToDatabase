@@ -384,12 +384,6 @@ namespace ExcelToDatabase.Controllers
                                                  }).ToList();
                     return Json(earningList);
                 }
-
-
-                var accounts = _context.Pay_Accounts.ToList();
-
-                var records = accounts.Where(r => r.ACTINDX == vm.ACTINDX).ToList();
-
             }
             catch (Exception ex)
             {
