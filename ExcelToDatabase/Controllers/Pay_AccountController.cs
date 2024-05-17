@@ -327,22 +327,42 @@ namespace ExcelToDatabase.Controllers
                 {
                     //Find an account with these matching ACTINDX,EarningId,PayPointId
                     //Then remove the PayPoint of the account with the matching ACTINDX & EarningId from the dropdownlist
-                    var allLinkedAccountsEarningId = _context.Pay_Accounts.AsNoTracking()
+                    var allLinkedAccountsPaypoints = _context.Pay_Accounts.AsNoTracking()
                                     .Where(r => r.ACTINDX == vm.ACTINDX && r.EarningId == vm.EarningId)
                                     .Select(r => r.PayPointId)
                                     .ToList();
 
-                    var payPoints = _context.Pay_Paypoint.Where(r => !allLinkedAccountsEarningId.Contains(r.PayPointId))
-                                                       .Select(r => r.PayPointId)
+                    var payPoints = _context.Pay_Paypoint.Where(r => !allLinkedAccountsPaypoints.Contains(r.PayPointId))
+                                                       //.Select(r => r.PayPointId)
                                                        .ToList();
                     //populate pay points dropdown with these pay points 
-
-                    // Code block
+                    List<SelectListItem> ppts = (from pp in payPoints 
+                                                 select new SelectListItem
+                                                {
+                                                    Value = pp.PayPointId.ToString(),
+                                                    Text = pp.PayPointDescription,
+                                                }).ToList() ;
+                    return Json(ppts);
                 }
 
                 if (vm.EarningId > 0 && vm.PayPointId > 0)
                 {
-                    // Code block
+                    var allLinkedAccountsEarnings = _context.Pay_Accounts.AsNoTracking()
+                                    .Where(r => r.EarningId == vm.EarningId && r.PayPointId == vm.PayPointId)
+                                    .Select(r => r.EarningId)
+                                    .ToList();
+
+                    var earnings = _context.Pay_Earning.Where(r => !allLinkedAccountsEarnings.Contains(r.EarningId))
+                                                       //.Select(r => r.PayPointId)
+                                                       .ToList();
+
+                    List<SelectListItem> ppts = (from erngs in earnings
+                                                 select new SelectListItem
+                                                 {
+                                                     Value = erngs.EarningId.ToString(),
+                                                     Text = erngs.Earning,
+                                                 }).ToList();
+                    return Json(ppts);
                 }
 
                 if (vm.PayPointId > 0 && vm.ACTINDX < 0)
