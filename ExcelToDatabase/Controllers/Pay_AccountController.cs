@@ -337,6 +337,7 @@ namespace ExcelToDatabase.Controllers
                                                        .ToList();
                     //populate pay points dropdown with these pay points 
                     List<SelectListItem> payPointsList = (from pp in payPoints 
+                                                          orderby pp.PayPointDescription
                                                  select new SelectListItem
                                                 {
                                                     Value = pp.PayPointId.ToString(),
@@ -348,9 +349,9 @@ namespace ExcelToDatabase.Controllers
                 if (vm.EarningId > 0 && vm.PayPointId > 0)
                 {
                     var allLinkedAccountsAccounts = _context.Pay_Accounts.AsNoTracking()
-                                    .Where(r => r.EarningId == vm.EarningId && r.PayPointId == vm.PayPointId)
-                                    .Select(r => r.ACTINDX)
-                                    .ToList();
+                                                .Where(r => r.EarningId == vm.EarningId && r.PayPointId == vm.PayPointId)
+                                                .Select(r => r.ACTINDX)
+                                                .ToList();
 
                     var gL00100s = _context.GL00100.Where(r => !allLinkedAccountsAccounts.Contains(r.ACTINDX))
                                                        //.Select(r => r.PayPointId)
@@ -379,6 +380,7 @@ namespace ExcelToDatabase.Controllers
                                                        .ToList();
                     //populate pay points dropdown with these pay points 
                     List<SelectListItem> earningList = (from earn in earnings
+                                                        orderby earn.Earning
                                                  select new SelectListItem
                                                  {
                                                      Value = earn.EarningId.ToString(),
