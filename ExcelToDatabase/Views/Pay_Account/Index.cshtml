@@ -88,6 +88,7 @@
                                     }
                                 </select>
                                 <label id="lblAccount" for="accountDropdown">Account</label>
+                                <img id="dotLoaderGlAccount" src="~/dot_loader.gif" alt="Loading..." style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 40px; height: 40px;display:none" />
                             </div>
                         </div>
                         <div style="padding-top:10px" class="row">
@@ -101,21 +102,25 @@
                                     }
                                 </select>
                                 <label id="lblPaypointDropdown" for="paypointDropdown">PayPoint</label>
+                                <img id="dotLoaderPaypoint" src="~/dot_loader.gif" alt="Loading..." style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 40px; height: 40px;display:none" />
                             </div>
                         </div>
-                        <div style="padding-top:10px" class="row">
+                        <div style="position: relative; padding-top:10px" class="row">
                             <div class="form-floating">
-
                                 <select id="earningDropdown" name="EarningId" class="form-control">
-                                    <option value="">-- Select Earning Type --</option>
+                                    <option value="">-- Select Earning Type -- </option>
                                     @foreach (var earning in ViewBag.AllEarningsDd)
                                     {
                                         <option value="@earning.EarningId">@earning.Earning</option>
                                     }
                                 </select>
                                 <label id="lblEarningDropdown" for="earningDropdown">Earning</label>
+                                <!-- Placing the GIF inside the select box -->
+                                <img id="dotLoaderEarning" src="~/dot_loader.gif" alt="Loading..." style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 40px; height: 40px; display:none" />
+                                
                             </div>
                         </div>
+
 @*                         <div style="padding-top:10px" class="row">
                             <div class="form-floating">
                                 <input type="text" id="datepicker"  name="selectedDate" class="form-control">
@@ -215,8 +220,10 @@
                 var paypointValue = $('#paypointDropdown').val();
 
                 if (earningValue && paypointValue) {
+                    $('#dotLoaderGlAccount').css('display', 'block');
                     AddRefreshDropDown();
                     ValidateAddForm();
+                    //$('#dotLoaderGlAccount').css('display', 'none');
                 }
             });
 
@@ -225,8 +232,12 @@
                 var paypointValue = $('#paypointDropdown').val();
 
                 if (accountValue && paypointValue) {
+                    $('#dotLoaderEarning').css('display', 'block');
                     AddRefreshDropDown();
                     ValidateAddForm();
+                    //$('#dotLoaderGlAccount').css('display', 'none');
+                    //$('#dotLoaderEarning').css('display', 'none');
+                    //$('#dotLoaderPaypoint').css('display', 'none');
                 }
             });
 
@@ -235,8 +246,10 @@
                 var earningValue = $('#earningDropdown').val();
 
                 if (accountValue && earningValue) {
+                    $('#dotLoaderPaypoint ').css('display', 'block');
                     AddRefreshDropDown();
                     ValidateAddForm();
+                    //$('#dotLoaderPaypoint').css('display', 'none');
                 }
             });
 
@@ -773,7 +786,10 @@
                         if (response == null) {
                             alert('Unable to fetch the account id.');
                         } else {
-
+                            $('#dotLoaderGlAccount').css('display', 'none');
+                            $('#dotLoaderEarning').css('display', 'none');
+                            $('#dotLoaderPaypoint').css('display', 'none');
+                            alert('Hellloo');
                             $(".btnManageAcc").attr("data-actid", response);
                             $(".btnDeleteAcc").attr("data-actid", response);
 

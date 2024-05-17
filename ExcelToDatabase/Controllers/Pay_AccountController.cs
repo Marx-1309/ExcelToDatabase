@@ -322,6 +322,7 @@ namespace ExcelToDatabase.Controllers
         {
             try
             {
+                Task.Delay(10000);
 
                 if (vm.ACTINDX > 0 && vm.EarningId > 0)
                 {
