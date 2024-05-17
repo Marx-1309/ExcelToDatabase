@@ -210,10 +210,35 @@
                 $('#tblAccounts').DataTable();
             }, 2500);
 
-            $('#earningDropdown').change(function () {
-                AddRefreshDropDown();
-                ValidateAddForm();
-            })
+            $('#earningDropdown, #paypointDropdown').change(function () {
+                var earningValue = $('#earningDropdown').val();
+                var paypointValue = $('#paypointDropdown').val();
+
+                if (earningValue && paypointValue) {
+                    AddRefreshDropDown();
+                    ValidateAddForm();
+                }
+            });
+
+            $('#accountDropdown, #paypointDropdown').change(function () {
+                var accountValue = $('#accountDropdown').val();
+                var paypointValue = $('#paypointDropdown').val();
+
+                if (accountValue && paypointValue) {
+                    AddRefreshDropDown();
+                    ValidateAddForm();
+                }
+            });
+
+            $('#accountDropdown, #earningDropdown').change(function () {
+                var accountValue = $('#accountDropdown').val();
+                var earningValue = $('#earningDropdown').val();
+
+                if (accountValue && earningValue) {
+                    AddRefreshDropDown();
+                    ValidateAddForm();
+                }
+            });
 
             $('#accountDropdown').change(function () {
                 ValidateAddForm();
