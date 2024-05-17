@@ -336,38 +336,53 @@ namespace ExcelToDatabase.Controllers
                                                        //.Select(r => r.PayPointId)
                                                        .ToList();
                     //populate pay points dropdown with these pay points 
-                    List<SelectListItem> ppts = (from pp in payPoints 
+                    List<SelectListItem> payPointsList = (from pp in payPoints 
                                                  select new SelectListItem
                                                 {
                                                     Value = pp.PayPointId.ToString(),
                                                     Text = pp.PayPointDescription,
                                                 }).ToList() ;
-                    return Json(ppts);
+                    return Json(payPointsList);
                 }
 
                 if (vm.EarningId > 0 && vm.PayPointId > 0)
                 {
-                    var allLinkedAccountsEarnings = _context.Pay_Accounts.AsNoTracking()
+                    var allLinkedAccountsAccounts = _context.Pay_Accounts.AsNoTracking()
                                     .Where(r => r.EarningId == vm.EarningId && r.PayPointId == vm.PayPointId)
+                                    .Select(r => r.ACTINDX)
+                                    .ToList();
+
+                    var gL00100s = _context.GL00100.Where(r => !allLinkedAccountsAccounts.Contains(r.ACTINDX))
+                                                       //.Select(r => r.PayPointId)
+                                                       .ToList();
+
+                    List<SelectListItem> glsAccountsList = (from gls in gL00100s
+                                                 select new SelectListItem
+                                                 {
+                                                     Value = gls.ACTINDX.ToString(),
+                                                     Text = gls.ACTDESCR,
+                                                 }).ToList();
+                    return Json(glsAccountsList);
+                }
+
+                if (vm.PayPointId > 0 && vm.ACTINDX < 0)
+                {
+                    var allLinkedAccountsEarnings = _context.Pay_Accounts.AsNoTracking()
+                                    .Where(r => r.PayPointId == vm.PayPointId && r.ACTINDX == vm.ACTINDX)
                                     .Select(r => r.EarningId)
                                     .ToList();
 
                     var earnings = _context.Pay_Earning.Where(r => !allLinkedAccountsEarnings.Contains(r.EarningId))
                                                        //.Select(r => r.PayPointId)
                                                        .ToList();
-
-                    List<SelectListItem> ppts = (from erngs in earnings
+                    //populate pay points dropdown with these pay points 
+                    List<SelectListItem> earningList = (from earn in earnings
                                                  select new SelectListItem
                                                  {
-                                                     Value = erngs.EarningId.ToString(),
-                                                     Text = erngs.Earning,
+                                                     Value = earn.EarningId.ToString(),
+                                                     Text = earn.Earning,
                                                  }).ToList();
-                    return Json(ppts);
-                }
-
-                if (vm.PayPointId > 0 && vm.ACTINDX < 0)
-                {
-                    // Code block
+                    return Json(earningList);
                 }
 
 
