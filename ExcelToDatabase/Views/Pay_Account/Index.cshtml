@@ -735,9 +735,14 @@
 
             function AddRefreshDropDown() {
                 //formData.DateCreated = $('#edDatepicker').val();
+                var formData = new Object();
+                formData.ACTINDX = $('#accountDropdown option:selected').val();
+                formData.PayPointId = $('#paypointDropdown option:selected').val();
+                formData.EarningId = $('#earningDropdown option:selected').val();
 
                 $.ajax({
                     url: 'pay_Account/RefreshAccountsConfigDropDown',
+                    data: formData,
                     type: 'get',
                     success: function (response) {
                         if (response == null) {

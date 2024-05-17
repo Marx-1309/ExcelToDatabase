@@ -357,6 +357,8 @@ namespace ExcelToDatabase.Controllers
                                                        .ToList();
 
                     List<SelectListItem> glsAccountsList = (from gls in gL00100s
+                                                            orderby gls.ACTDESCR
+                                                            where gls.ACCATNUM == 10
                                                  select new SelectListItem
                                                  {
                                                      Value = gls.ACTINDX.ToString(),
@@ -365,7 +367,7 @@ namespace ExcelToDatabase.Controllers
                     return Json(glsAccountsList);
                 }
 
-                if (vm.PayPointId > 0 && vm.ACTINDX < 0)
+                if (vm.PayPointId > 0 && vm.ACTINDX > 0)
                 {
                     var allLinkedAccountsEarnings = _context.Pay_Accounts.AsNoTracking()
                                     .Where(r => r.PayPointId == vm.PayPointId && r.ACTINDX == vm.ACTINDX)
