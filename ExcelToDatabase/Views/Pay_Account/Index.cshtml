@@ -216,13 +216,14 @@
             }, 2500);
 
             $('#earningDropdown, #paypointDropdown').change(function () {
+                var accountValue = $('#accountDropdown').val();
                 var earningValue = $('#earningDropdown').val();
                 var paypointValue = $('#paypointDropdown').val();
 
-                if (earningValue && paypointValue) {
+                if (earningValue && paypointValue && accountValue == 0) {
                     $('#dotLoaderGlAccount').css('display', 'block');
                     AddRefreshDropDown();
-                    ValidateAddForm();
+                    //ValidateAddForm();
                     //$('#dotLoaderGlAccount').css('display', 'none');
                 }
             });
@@ -230,11 +231,13 @@
             $('#accountDropdown, #paypointDropdown').change(function () {
                 var accountValue = $('#accountDropdown').val();
                 var paypointValue = $('#paypointDropdown').val();
+                var earningValue = $('#earningDropdown').val();
 
-                if (accountValue && paypointValue) {
+                if (accountValue && paypointValue && earningValue == 0) {
+                    $('#earningDropdown').empty().append('<option selected="selected" value="0" disabled = "disabled">Loading.....</option>');
                     $('#dotLoaderEarning').css('display', 'block');
                     AddRefreshDropDown();
-                    ValidateAddForm();
+                    //ValidateAddForm();
                     //$('#dotLoaderGlAccount').css('display', 'none');
                     //$('#dotLoaderEarning').css('display', 'none');
                     //$('#dotLoaderPaypoint').css('display', 'none');
@@ -244,11 +247,12 @@
             $('#accountDropdown, #earningDropdown').change(function () {
                 var accountValue = $('#accountDropdown').val();
                 var earningValue = $('#earningDropdown').val();
+                var paypointValue = $('#paypointDropdown').val();
 
-                if (accountValue && earningValue) {
+                if (accountValue && earningValue && paypointValue == 0) {
                     $('#dotLoaderPaypoint ').css('display', 'block');
                     AddRefreshDropDown();
-                    ValidateAddForm();
+                    //ValidateAddForm();
                     //$('#dotLoaderPaypoint').css('display', 'none');
                 }
             });
@@ -390,6 +394,34 @@
                 $('#accountDropdown').val($('#accountDropdown option:first').val());
                 $('#paypointDropdown').val($('#paypointDropdown option:first').val());
                 $('#earningDropdown').val($('#earningDropdown option:first').val());
+
+                $('#earningDropdown').css('border-color', 'lightgrey');
+                $('#paypointDropdown').css('border-color', 'lightgrey');
+                $('#accountDropdown').css('border-color', 'lightgrey');
+
+                // $('#lblPaypointDropdown').append("").css('color', 'white');
+                // $('#lblAccount').append("").css('color', 'white');
+                // $('#lblEarningDropdown').append("").css('color', 'white');
+
+                if ($('#accountDropdown').val().trim() == "") {
+                    $('#lblAccount').empty();
+                    $('#lblAccount').append("Account").css('color', 'black'); // Remove the asterisk here
+                    $('#accountDropdown').css('border-color', 'lightgrey');
+                    isValid = false;
+                }
+                if ($('#paypointDropdown').val().trim() == "") {
+                    $('#lblPaypointDropdown').empty();
+                    $('#lblPaypointDropdown').append("Paypoint").css('color', 'black'); // Remove the asterisk here
+                    $('#paypointDropdown').css('border-color', 'lightgrey');
+                    isValid = false;
+                }
+                if ($('#earningDropdown').val().trim() == "") {
+                    $('#lblEarningDropdown').empty();
+                    $('#lblEarningDropdown').append("Earning").css('color', 'black'); // Remove the asterisk here
+                    $('#earningDropdown').css('border-color', 'lightgrey');
+                    isValid = false;
+                }
+
                 // $('#datepicker').val('');
             }
 
@@ -772,6 +804,11 @@
             }
 
             function AddRefreshDropDown() {
+                var glAccounts = $('#accountDropdown').val();
+                var payPoint = $('#paypointDropdown').val();
+                var earnings = $('#earningDropdown').val();
+
+               
                 //formData.DateCreated = $('#edDatepicker').val();
                 var formData = new Object();
                 formData.ACTINDX = $('#accountDropdown option:selected').val();
@@ -786,13 +823,25 @@
                         if (response == null) {
                             alert('Unable to fetch the account id.');
                         } else {
-                            $('#dotLoaderGlAccount').css('display', 'none');
-                            $('#dotLoaderEarning').css('display', 'none');
-                            $('#dotLoaderPaypoint').css('display', 'none');
-                            alert('Hellloo');
-                            $(".btnManageAcc").attr("data-actid", response);
-                            $(".btnDeleteAcc").attr("data-actid", response);
+                            alert(response[1].modelName);
+                            if (response[1].modelName == "Pay_Earning") 
+                            {
+                                $('#earningDropdown').empty().append('<option selected="selected" value="0">--Please select--</option>');
+                                $.each(response, function (index, item) {
+                                    // glAccountDd.append($("<option></option>").val(this['Value']).html(this['Text']));
 
+                                    $('#earningDropdown').append($("<option></option>").val(item.value).html(item.text));
+                                });
+                                $('#dotLoaderEarning').css('display', 'none');
+                            }
+                            if (response[1].modelName ="GL00100") 
+                            {
+                                alert("Gl Acc");
+                            } else 
+                            {
+                                alert("Pay_Paypoint");
+                            }
+                            
                             //alert('The id is  ' + response);
                             return response;
                         }

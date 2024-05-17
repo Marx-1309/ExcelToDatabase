@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ExcelToDatabase.Models;
 using System.Text.Json;
 using BenchmarkDotNet.Running;
 using BenchmarkDotNet.Filters;
+using HrGpIntegration.Custom_SelectLists;
 
 
 namespace ExcelToDatabase.Controllers
@@ -144,10 +144,10 @@ namespace ExcelToDatabase.Controllers
         {
             if (id == 1)
             {
-                List<SelectListItem> glAccounts = (from account in this._context.GL00100
+                List<CustomSelectListItem> glAccounts = (from account in this._context.GL00100
                                                    where account.ACCATNUM == 10
                                                    orderby account.ACTDESCR
-                                                   select new SelectListItem
+                                                   select new CustomSelectListItem
                                                    {
                                                        Value = account.ACTINDX.ToString(),
                                                        Text = account.ACTDESCR,
@@ -156,9 +156,9 @@ namespace ExcelToDatabase.Controllers
             }
             if (id == 2)
             {
-                List<SelectListItem> paypoints = (from paypoint in this._context.Pay_Paypoint
+                List<CustomSelectListItem> paypoints = (from paypoint in this._context.Pay_Paypoint
                                                   orderby paypoint.PayPointDescription
-                                                  select new SelectListItem
+                                                  select new CustomSelectListItem
                                                   {
                                                       Value = paypoint.PayPointId.ToString(),
                                                       Text = paypoint.PayPointDescription,
@@ -167,9 +167,9 @@ namespace ExcelToDatabase.Controllers
             }
             if (id == 3)
             {
-                List<SelectListItem> earnings = (from earning in this._context.Pay_Earning
+                List<CustomSelectListItem> earnings = (from earning in this._context.Pay_Earning
                                                  orderby earning.Earning
-                                                 select new SelectListItem
+                                                 select new CustomSelectListItem
                                                  {
                                                      Value = earning.EarningId.ToString(),
                                                      Text = earning.Earning,
@@ -318,11 +318,12 @@ namespace ExcelToDatabase.Controllers
           return (_context.Pay_Accounts?.Any(e => e.ACTINDX == id)).GetValueOrDefault();
         }
 
-        public JsonResult RefreshAccountsConfigDropDown(AccountVm vm)
+        public async Task<JsonResult> RefreshAccountsConfigDropDown(AccountVm vm)
         {
+            await Task.Delay(3000);
             try
             {
-                Task.Delay(10000);
+                
 
                 if (vm.ACTINDX > 0 && vm.EarningId > 0)
                 {
@@ -337,10 +338,11 @@ namespace ExcelToDatabase.Controllers
                                                        //.Select(r => r.PayPointId)
                                                        .ToList();
                     //populate pay points dropdown with these pay points 
-                    List<SelectListItem> payPointsList = (from pp in payPoints 
+                    List<CustomSelectListItem> payPointsList = (from pp in payPoints 
                                                           orderby pp.PayPointDescription
-                                                 select new SelectListItem
-                                                {
+                                                 select new CustomSelectListItem
+                                                 {
+                                                     ModelName = "Pay_Paypoint",
                                                     Value = pp.PayPointId.ToString(),
                                                     Text = pp.PayPointDescription,
                                                 }).ToList() ;
@@ -358,11 +360,12 @@ namespace ExcelToDatabase.Controllers
                                                        //.Select(r => r.PayPointId)
                                                        .ToList();
 
-                    List<SelectListItem> glsAccountsList = (from gls in gL00100s
+                    List<CustomSelectListItem> glsAccountsList = (from gls in gL00100s
                                                             orderby gls.ACTDESCR
                                                             where gls.ACCATNUM == 10
-                                                 select new SelectListItem
+                                                 select new CustomSelectListItem
                                                  {
+                                                     ModelName = "GL00100",
                                                      Value = gls.ACTINDX.ToString(),
                                                      Text = gls.ACTDESCR,
                                                  }).ToList();
@@ -380,10 +383,11 @@ namespace ExcelToDatabase.Controllers
                                                        //.Select(r => r.PayPointId)
                                                        .ToList();
                     //populate pay points dropdown with these pay points 
-                    List<SelectListItem> earningList = (from earn in earnings
+                    List<CustomSelectListItem> earningList = (from earn in earnings
                                                         orderby earn.Earning
-                                                 select new SelectListItem
+                                                 select new CustomSelectListItem
                                                  {
+                                                     ModelName = "Pay_Earning",
                                                      Value = earn.EarningId.ToString(),
                                                      Text = earn.Earning,
                                                  }).ToList();
@@ -394,7 +398,7 @@ namespace ExcelToDatabase.Controllers
             {
 
             }
-            return Json(true);
+            return Json(false);
         }
     }
 }
