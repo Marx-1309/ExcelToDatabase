@@ -15,7 +15,7 @@
     <div class="card-header"><b>GL Accounts</b></div>
     <div class="card-body">
 @*         <h4 class="card-title">Light card title</h4> *@
-        <table class="table" id="tblAccounts">
+        <table class="table table-hover" id="tblAccounts">
             <thead>
                 <tr>
                     <th>
@@ -77,7 +77,7 @@
                 <div class="row">
                     <!-- First Section with 3 Input Fields -->
                     <div class="col-md-12">
-                        <div style="padding-top:10px" class="row">
+                        <div id="addAccountOuterDiv" style="padding-top:10px" class="row">
                             <div class="form-floating">
 
                                 <select id="accountDropdown" name="ACTINDX" class="form-control">
@@ -91,7 +91,7 @@
                                 <img id="dotLoaderGlAccount" src="~/dot_loader.gif" alt="Loading..." style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 40px; height: 40px;display:none" />
                             </div>
                         </div>
-                        <div style="padding-top:10px" class="row">
+                        <div id="addPayPointOuterDiv" style="padding-top:10px" class="row">
                             <div class="form-floating">
 
                                 <select id="paypointDropdown" name="MonthId" class="form-control">
@@ -105,7 +105,7 @@
                                 <img id="dotLoaderPaypoint" src="~/dot_loader.gif" alt="Loading..." style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 40px; height: 40px;display:none" />
                             </div>
                         </div>
-                        <div style="position: relative; padding-top:10px" class="row">
+                        <div id="addEarningOuterDiv" style="position: relative; padding-top:10px" class="row">
                             <div class="form-floating">
                                 <select id="earningDropdown" name="EarningId" class="form-control">
                                     <option value="">-- Select Earning Type -- </option>
@@ -221,7 +221,12 @@
                 var paypointValue = $('#paypointDropdown').val();
 
                 if (earningValue && paypointValue && accountValue == 0) {
+                    $('#accountDropdown').empty().append('<option selected="selected" value="0" disabled = "disabled">Loading.....</option>');
                     $('#dotLoaderGlAccount').css('display', 'block');
+                    $('#addAccountOuterDiv').css('pointer-events', 'none'); // Disable pointer events
+                    $('#addAccountOuterDiv').css('opacity', '0.5');
+
+                    
                     AddRefreshDropDown();
                     //ValidateAddForm();
                     //$('#dotLoaderGlAccount').css('display', 'none');
@@ -236,6 +241,9 @@
                 if (accountValue && paypointValue && earningValue == 0) {
                     $('#earningDropdown').empty().append('<option selected="selected" value="0" disabled = "disabled">Loading.....</option>');
                     $('#dotLoaderEarning').css('display', 'block');
+                    $('#addEarningOuterDiv').css('pointer-events', 'none'); // Disable pointer events
+                    $('#addEarningOuterDiv').css('opacity', '0.5');
+
                     AddRefreshDropDown();
                     //ValidateAddForm();
                     //$('#dotLoaderGlAccount').css('display', 'none');
@@ -250,25 +258,29 @@
                 var paypointValue = $('#paypointDropdown').val();
 
                 if (accountValue && earningValue && paypointValue == 0) {
+                    $('#paypointDropdown').empty().append('<option selected="selected" value="0" disabled = "disabled">Loading.....</option>');
                     $('#dotLoaderPaypoint ').css('display', 'block');
+                    $('#addPayPointOuterDiv').css('pointer-events', 'none'); // Disable pointer events
+                    $('#addPayPointOuterDiv').css('opacity', '0.5');
+
                     AddRefreshDropDown();
                     //ValidateAddForm();
                     //$('#dotLoaderPaypoint').css('display', 'none');
                 }
             });
 
-            $('#accountDropdown').change(function () {
-                ValidateAddForm();
-            })
+            // $('#accountDropdown').change(function () {
+            //     ValidateAddForm();
+            // })
 
-            $('#paypointDropdown').change(function () {
+            // $('#paypointDropdown').change(function () {
 
-                ValidateAddForm();
-            })
+            //     ValidateAddForm();
+            // })
 
-            $('#earningDropdown').change(function () {
-                ValidateAddForm();
-            })
+            // $('#earningDropdown').change(function () {
+            //     ValidateAddForm();
+            // })
 
             //Remove LoaderDiv if the dropDown value is not Zero
             $('#accountDropdown').change(function () {
@@ -861,16 +873,37 @@
                                     $('#earningDropdown').append($("<option></option>").val(item.value).html(item.text));
                                 });
                                 $('#dotLoaderEarning').css('display', 'none');
+                                $('#addEarningOuterDiv').css('pointer-events', '');
+                                $('#addEarningOuterDiv').css('opacity', '');
+
                             }
                             if (response[1].modelName =="GL00100") 
                             {
-                                alert("Gl Acc");
+                                $('#accountDropdown').empty().append('<option selected="selected" value="0">--Please select--</option>');
+                                $.each(response, function (index, item) {
+                                    // glAccountDd.append($("<option></option>").val(this['Value']).html(this['Text']));
+
+                                    $('#accountDropdown').append($("<option></option>").val(item.value).html(item.text));
+                                });
+                                $('#dotLoaderGlAccount').css('display', 'none');
+                                $('#addAccountOuterDiv').css('pointer-events', '');
+                                $('#addAccountOuterDiv').css('opacity', '');
                             }
                             if (response[1].modelName == "Pay_Paypoint") {
-                                alert("Pay_Paypoint");
+                                $('#paypointDropdown').empty().append('<option selected="selected" value="0">--Please select--</option>');
+                                $.each(response, function (index, item) {
+                                    // glAccountDd.append($("<option></option>").val(this['Value']).html(this['Text']));
+
+                                    $('#paypointDropdown').append($("<option></option>").val(item.value).html(item.text));
+                                });
+                                $('#dotLoaderPaypoint').css('display', 'none');
+                                $('#addPayPointOuterDiv').css('pointer-events','');
+                                $('#addPayPointOuterDiv').css('opacity','');
+                            }
+                            else if (response[1] = null || undefined || response.length ==0){
+                                alert('Unable to fetch list data.');
                             }
                             
-                            //alert('The id is  ' + response);
                             return response;
                         }
                     },
