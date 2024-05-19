@@ -228,7 +228,7 @@
 
                     
                     AddRefreshDropDown();
-                    //ValidateAddForm();
+                    ValidateAddForm();
                     //$('#dotLoaderGlAccount').css('display', 'none');
                 }
             });
@@ -245,7 +245,7 @@
                     $('#addEarningOuterDiv').css('opacity', '0.5');
 
                     AddRefreshDropDown();
-                    //ValidateAddForm();
+                    ValidateAddForm();
                     //$('#dotLoaderGlAccount').css('display', 'none');
                     //$('#dotLoaderEarning').css('display', 'none');
                     //$('#dotLoaderPaypoint').css('display', 'none');
@@ -264,7 +264,7 @@
                     $('#addPayPointOuterDiv').css('opacity', '0.5');
 
                     AddRefreshDropDown();
-                    //ValidateAddForm();
+                    ValidateAddForm();
                     //$('#dotLoaderPaypoint').css('display', 'none');
                 }
             });
@@ -289,6 +289,19 @@
                     $('#dotLoaderGlAccount').css('display', 'none');
                     
                 }
+               //new mod
+                if ($('#accountDropdown').val().trim() == "" || $('#accountDropdown').val().trim() === "0") {
+                    //$('#lblAccount').html()[0].empty();
+                    $('#lblAccount').empty();
+                    $('#lblAccount').append("Account *").css('color', 'Red');
+                    $('#accountDropdown').css('border-color', 'Red');
+                    isValid = false;
+                }
+                else {
+                    $('#accountDropdown').css('border-color', 'lightgrey');
+                    $('#lblAccount').empty();
+                    $('#lblAccount').append("Account").css('color', 'Black');
+                }
             })
 
             $('#paypointDropdown').change(function () {
@@ -297,12 +310,36 @@
                     
                     $('#dotLoaderPaypoint').css('display', 'none');
                 }
+                //new mod
+                if ($('#paypointDropdown').val().trim() === "" || $('#paypointDropdown').val().trim() === "0") {
+                    $('#lblPaypointDropdown').empty();
+                    $('#lblPaypointDropdown').append("PayPoint *").css('color', 'Red');
+                    $('#paypointDropdown').css('border-color', 'Red');
+                    isValid = false;
+                }
+                else {
+                    $('#paypointDropdown').css('border-color', 'lightgrey');
+                    $('#lblPaypointDropdown').empty();
+                    $('#lblPaypointDropdown').append("PayPoint").css('color', 'Black');
+                }
             })
 
             $('#earningDropdown').change(function () {
                 var earningDropdownVal = $('#earningDropdown').val();
                 if (earningDropdownVal > 0) {
                     $('#dotLoaderEarning').css('display', 'none');
+                }
+                //new mod
+                if ($('#earningDropdown').val().trim() == "" || $('#earningDropdown').val().trim() === "0") {
+                    $('#lblEarningDropdown').empty();
+                    $('#lblEarningDropdown').append("Earning *").css('color', 'Red');
+                    $('#earningDropdown').css('border-color', 'Red');
+                    isValid = false;
+                }
+                else {
+                    $('#earningDropdown').css('border-color', 'lightgrey');
+                    $('#lblEarningDropdown').empty();
+                    $('#lblEarningDropdown').append("Earning").css('color', 'Black');
                 }
             })
 
@@ -336,7 +373,7 @@
                 var isValid = true;
                 var str = '*'
 
-                if ($('#accountDropdown').val().trim() == "") {
+                if ($('#accountDropdown').val().trim() == "" || $('#accountDropdown').val().trim() === "0") {
                     //$('#lblAccount').html()[0].empty();
                     $('#lblAccount').empty();
                     $('#lblAccount').append("Account *").css('color', 'Red');
@@ -349,7 +386,7 @@
                     $('#lblAccount').append("Account").css('color', 'Black');
                 }
 
-                if ($('#paypointDropdown').val().trim() == "") {
+                if ($('#paypointDropdown').val().trim() === "" || $('#paypointDropdown').val().trim() === "0") {
                     $('#lblPaypointDropdown').empty();
                     $('#lblPaypointDropdown').append("PayPoint *").css('color', 'Red');
                     $('#paypointDropdown').css('border-color', 'Red');
@@ -361,7 +398,7 @@
                     $('#lblPaypointDropdown').append("PayPoint").css('color', 'Black');
                 }
 
-                if ($('#earningDropdown').val().trim() == "") {
+                if ($('#earningDropdown').val().trim() == "" || $('#earningDropdown').val().trim() === "0") {
                     $('#lblEarningDropdown').empty();
                     $('#lblEarningDropdown').append("Earning *").css('color', 'Red');
                     $('#earningDropdown').css('border-color', 'Red');
