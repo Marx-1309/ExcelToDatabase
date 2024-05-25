@@ -1,4 +1,5 @@
 ﻿using ExcelToDatabase.Models;
+using HrGpIntegration.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,6 +15,8 @@ public class ApplicationDbContext : IdentityDbContext
     public DbSet<Pay_Month> Pay_Month { get; set; } = default!;
     public DbSet<ExcelToDatabase.Models.Pay_UploadInstance> Pay_UploadInstance { get; set; } = default!;
     public DbSet<ExcelToDatabase.Models.Pay_Deductions> Pay_Deduction { get; set; } = default!;
+    public DbSet<ApplicationUser> ApplicationUsers { get; set; } = default!;
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
