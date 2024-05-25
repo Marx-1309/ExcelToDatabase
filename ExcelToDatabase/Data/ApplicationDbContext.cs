@@ -1,7 +1,8 @@
 ﻿using ExcelToDatabase.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-public class ApplicationDbContext : DbContext
+public class ApplicationDbContext : IdentityDbContext
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
@@ -18,12 +19,14 @@ public class ApplicationDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        // Ignore the Pay_Month entity during migrations
-        //modelBuilder.Ignore<Pay_Account>();
-        //modelBuilder.Ignore<Pay_Paypoint>();
-        //modelBuilder.Ignore<Pay_Earning>();
-        //modelBuilder.Ignore<Pay_VIP>();
-        //modelBuilder.Ignore<Pay_Month>();
-        //modelBuilder.Ignore<Pay_UploadInstance>();
+        //Ignore the Pay_Month entity during migrations
+        modelBuilder.Ignore<Pay_Account>();
+        modelBuilder.Ignore<Pay_Paypoint>();
+        modelBuilder.Ignore<Pay_Earning>();
+        modelBuilder.Ignore<Pay_VIP>();
+        modelBuilder.Ignore<Pay_Month>();
+        modelBuilder.Ignore<Pay_UploadInstance>();
+        modelBuilder.Ignore<GL00100>();
+        modelBuilder.Ignore<Pay_Deductions>();
     }
 }

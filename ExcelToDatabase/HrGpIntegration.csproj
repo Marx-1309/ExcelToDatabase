@@ -16,6 +16,7 @@
     <PackageReference Include="BenchmarkDotNet.Core" Version="0.10.14" />
     <PackageReference Include="ExcelDataReader" Version="3.6.0" />
     <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.3.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="7.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.16" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.16">
@@ -33,7 +34,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Migrations\" />
     <Folder Include="wwwroot\Uploads\Earning_Docs\" />
     <Folder Include="wwwroot\Uploads\Deduction_Docs\" />
   </ItemGroup>

@@ -1,10 +1,13 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
     throw new InvalidOperationException("Connection String 'DefaultConnection' not found");
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
+builder.Services.AddIdentity<IdentityUser,IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
