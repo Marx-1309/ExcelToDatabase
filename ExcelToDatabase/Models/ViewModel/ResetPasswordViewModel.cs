@@ -1,12 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace HrGpIntegration.Models
+namespace HrGpIntegration.Models.ViewModel
 {
-    public class RegisterViewModel
+    public class ResetPasswordViewModel
     {
+
+        public string Code { get; set; }
+
         [Required]
         [EmailAddress]
-        [Display(Name = "Email")]
         public string Email { get; set; }
 
         [Required]
@@ -19,8 +21,5 @@ namespace HrGpIntegration.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
-
-        public string Name { get; set; }
-
     }
 }

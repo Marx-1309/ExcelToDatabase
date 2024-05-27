@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿﻿@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<HrGpIntegration.Models.ApplicationUser> SignInManager
+@inject UserManager<HrGpIntegration.Models.ApplicationUser> UserManager;
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -16,51 +21,62 @@
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-black border-bottom box-shadow mb-3">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"> <img src="~/orc_icon.jfif" style="height:30px" /> Omusati Regional Council</a>
+                <partial name="_LoginPartialCustom" />
             </div>
+            
 
         </nav>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <partial name="_LoginPartialCustom" />
-                    <ul class="navbar-nav flex-grow-1">
-                        
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><img src="~/bsicons/upload.svg" /> Upload Files</a>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" asp-controller="Pay_UploadInstance" asp-action="Index"> Earnings & Deductions </a>
-                               @*  <a class="dropdown-item" asp-controller="Home" asp-action="UploadExcel">Deductions</a> *@
-                            </div>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><img src="~/bsicons/tools.svg" /> Tools</a>
-                            <div class="dropdown-menu">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Pay_Earning" asp-action="Index">Earnings</a>
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Pay_PayPoint" asp-action="Index">Pay Point</a>
-                                @*  <a class="dropdown-item" asp-controller="Home" asp-action="UploadExcel">Deductions</a> *@
-                            </div>
-                        </li>
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+                <div class="container-fluid">
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
 
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Pay_Account" asp-action="Index"><img src="~/bsicons/person-vcard.svg" /> GL Accounts config</a>
-                        </li>
-                       
-                        
-                    </ul>
-                   
-                   
+                        <ul class="navbar-nav flex-grow-1">
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><img src="~/bsicons/upload.svg" /> Upload Files</a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" asp-controller="Pay_UploadInstance" asp-action="Index"> Earnings & Deductions </a>
+                                    @*  <a class="dropdown-item" asp-controller="Home" asp-action="UploadExcel">Deductions</a> *@
+                                </div>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><img src="~/bsicons/tools.svg" /> Tools</a>
+                                <div class="dropdown-menu">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Pay_Earning" asp-action="Index">Earnings</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Pay_PayPoint" asp-action="Index">Pay Point</a>
+                                    @*  <a class="dropdown-item" asp-controller="Home" asp-action="UploadExcel">Deductions</a> *@
+                                </div>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Pay_Account" asp-action="Index"><img src="~/bsicons/person-vcard.svg" /> GL Accounts config</a>
+                            </li>
+
+
+                        </ul>
+
+
+                    </div>
+
                 </div>
-                
-            </div>
-        </nav>
+            </nav>
+        }
+        
     </header>
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
+            <div class="alert alert-dismissible alert-warning">
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                <h4 class="alert-heading">Warning!</h4>
+                <p class="mb-0">This version of the application is for demonstration purpose,the original version was deployed onsite and is not available for public viewing. Have fun and modify as you wish.</p>
+            </div>
             <partial name="_Notifications" />
         </main>
     </div>

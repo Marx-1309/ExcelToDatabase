@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace HrGpIntegration.Models
+namespace HrGpIntegration.Models.ViewModel
 {
     public class LoginViewModel
     {

@@ -9,14 +9,18 @@ using System.Text.Json;
 using BenchmarkDotNet.Running;
 using BenchmarkDotNet.Filters;
 using HrGpIntegration.Custom_SelectLists;
+using Microsoft.AspNetCore.Authorization;
+
 
 
 namespace ExcelToDatabase.Controllers
 {
+    [Authorize]
     public class Pay_AccountController : Controller
     {
         private readonly ApplicationDbContext _context;
 
+        
         public Pay_AccountController(ApplicationDbContext context)
         {
             _context = context;

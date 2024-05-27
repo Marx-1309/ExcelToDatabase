@@ -23,13 +23,13 @@ public class ApplicationDbContext : IdentityDbContext
         base.OnModelCreating(modelBuilder);
 
         //Ignore the Pay_Month entity during migrations
-        modelBuilder.Ignore<Pay_Account>();
-        modelBuilder.Ignore<Pay_Paypoint>();
-        modelBuilder.Ignore<Pay_Earning>();
-        modelBuilder.Ignore<Pay_VIP>();
-        modelBuilder.Ignore<Pay_Month>();
-        modelBuilder.Ignore<Pay_UploadInstance>();
-        modelBuilder.Ignore<GL00100>();
-        modelBuilder.Ignore<Pay_Deductions>();
+        //modelBuilder.Ignore<Pay_Account>();
+        //modelBuilder.Ignore<Pay_Paypoint>();
+        //modelBuilder.Ignore<Pay_Earning>();
+        //modelBuilder.Ignore<Pay_VIP>();
+        //modelBuilder.Ignore<Pay_Month>();
+        //modelBuilder.Ignore<Pay_UploadInstance>();
+        //modelBuilder.Ignore<GL00100>();
+        //modelBuilder.Ignore<Pay_Deductions>();
     }
 }
