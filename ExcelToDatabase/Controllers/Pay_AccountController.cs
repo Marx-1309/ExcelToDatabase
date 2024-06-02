@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ExcelToDatabase.Models;
-using System.Text.Json;
-using BenchmarkDotNet.Running;
-using BenchmarkDotNet.Filters;
 using HrGpIntegration.Custom_SelectLists;
 using Microsoft.AspNetCore.Authorization;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Reporting.NETCore;
+
+
+
 
 
 
@@ -20,10 +20,13 @@ namespace ExcelToDatabase.Controllers
     {
         private readonly ApplicationDbContext _context;
 
-        
-        public Pay_AccountController(ApplicationDbContext context)
+        private IWebHostEnvironment Environment;
+
+
+        public Pay_AccountController(ApplicationDbContext context, IWebHostEnvironment _environment)
         {
             _context = context;
+            this.Environment = _environment;
         }
 
         // GET: Pay_Account
@@ -403,6 +406,56 @@ namespace ExcelToDatabase.Controllers
 
             }
             return Json(false);
+        }
+
+        //[HttpGet]
+        //public async IActionResult AccountsViewDetails(string accountId)
+        //{
+        //    try
+        //    {
+        //        var glAccounts = _context.GL00100.ToListAsync();
+        //        var payPoints = _context.Pay_Paypoint.ToListAsync();
+        //        var earnings = _context.Pay_Earning.ToListAsync();
+
+        //        List<Pay_Account> accounts  = await _context.Pay_Accounts.ToListAsync();
+
+        //        foreach (var account in accounts) 
+        //        {
+
+                
+        //        }
+                
+        //    }
+        //    catch (Exception ex) 
+        //    { 
+            
+        //    }
+        //}
+
+        [HttpPost]
+        public IActionResult ViewReport()
+        {
+            var uploadsFolder = $"{Directory.GetCurrentDirectory()}\\wwwroot\\Uploads\\Reports\\";
+
+            if (!Directory.Exists(uploadsFolder))
+            {
+                Directory.CreateDirectory(uploadsFolder);
+            }
+
+            string reportFilePath =  uploadsFolder;
+            using (Stream stream = new FileStream(reportFilePath, FileMode.Open, FileAccess.Read))
+            {
+                var dataSource = (from customer in this._context.Pay_Accounts.Take(10)
+                                          select customer);
+
+                using (LocalReport report = new LocalReport())
+                {
+                    report.LoadReportDefinition(stream);
+                    report.DataSources.Add(new ReportDataSource("Customers", dataSource));
+                    byte[] reportData = report.Render("PDF");
+                    return File(reportData, "application/pdf");
+                }
+            }
         }
     }
 }

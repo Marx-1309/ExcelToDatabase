@@ -1,8 +1,9 @@
-﻿@model List<ExcelToDatabase.Models.AccountVm>
-
-@{
-    ViewData["Title"] = "Index";
-}
+﻿@using ExcelToDatabase.Models;
+@model List<ExcelToDatabase.Models.AccountVm>
+    @addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
+    @{
+        //Layout = null;
+    }
 
 <p>
     <button id="btnProcess" type="button" class="btn btn-primary"> Process Account</button>
@@ -15,7 +16,10 @@
     <div class="card-header"><b>GL Accounts</b></div>
     <div class="card-body">
 @*         <h4 class="card-title">Light card title</h4> *@
-        <table class="table table-hover" id="tblAccounts">
+        <form method="post" asp-controller="Pay_Account" asp-action="ViewReport">
+            <input type="submit" value="View Report" />
+        </form>
+        <table style="padding:10px" class="table table-hover" id="tblAccounts">
             <thead>
                 <tr>
                     <th>
