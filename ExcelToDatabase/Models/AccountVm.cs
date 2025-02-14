@@ -1,7 +1,10 @@
-﻿namespace ExcelToDatabase.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ExcelToDatabase.Models
 {
     public class AccountVm
     {
+        [Key]
         public int AccountId { get; set; }
         public string? AccountName { get; set; }
         public int PayPointId { get; set; }

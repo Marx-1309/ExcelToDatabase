@@ -32,4 +32,7 @@ public class ApplicationDbContext : IdentityDbContext
         //modelBuilder.Ignore<GL00100>();
         //modelBuilder.Ignore<Pay_Deductions>();
     }
+
+
+    public DbSet<ExcelToDatabase.Models.AccountVm> AccountVm { get; set; } = default!;
 }

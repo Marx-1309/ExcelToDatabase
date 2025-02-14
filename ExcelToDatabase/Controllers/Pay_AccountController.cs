@@ -409,7 +409,7 @@ namespace ExcelToDatabase.Controllers
         }
 
         //[HttpGet]
-        //public async IActionResult AccountsViewDetails(string accountId)
+        //public  async Task<IActionResult> AccountsViewDetails()
         //{
         //    try
         //    {
@@ -417,18 +417,27 @@ namespace ExcelToDatabase.Controllers
         //        var payPoints = _context.Pay_Paypoint.ToListAsync();
         //        var earnings = _context.Pay_Earning.ToListAsync();
 
-        //        List<Pay_Account> accounts  = await _context.Pay_Accounts.ToListAsync();
-
-        //        foreach (var account in accounts) 
+        //        List<Pay_Account> accounts = await _context.Pay_Accounts.ToListAsync();
+        //        List< AccountVm> accountVms = new List< AccountVm>();
+        //        foreach (var account in accounts)
         //        {
-
-                
+        //            //var gl = _context.GL00100.Where(r => r.ACTINDX == account.ACTINDX).Select(r => r.ACTDESCR); ;
+        //            var acc = new { 
+        //                            Id =  account.AccountId,
+        //                            Gl = await _context.GL00100.Where(r => r.ACTINDX == account.ACTINDX).Select(r=>r.ACTDESCR).FirstOrDefaultAsync(),
+        //                            Pp = await _context.Pay_Paypoint.Where(r => r.PayPointId == account.PayPointId).Select(r=>r.PayPointCode).FirstOrDefaultAsync(),
+        //                            Erng = await _context.Pay_Earning.Where(r => r.EarningId == account.EarningId).Select(r => r.EarningId).FirstOrDefaultAsync()
+        //            };
+        //            accountVms.Add(new AccountVm { GlAccountName = acc.Gl.ToString(),
+        //                                           PayPointCode = acc.Pp.ToString(),
+        //                                           EarningName = acc.Erng.ToString()});
         //        }
-                
+
+        //        return View(accountVms);
         //    }
-        //    catch (Exception ex) 
-        //    { 
-            
+        //    catch (Exception ex)
+        //    {
+        //        return View();
         //    }
         //}
 
